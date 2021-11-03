@@ -37,6 +37,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("user").password("{noop}password").roles("USER").and()
+                .withUser("employee").password("{noop}password").roles("EMPLOYEE").and()
                 .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
     }
 //
@@ -86,7 +87,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET,"/public").permitAll()
 //                .anyRequest().denyAll()
                 // permit all later verwijderen!
-                .anyRequest().permitAll()
+//                .anyRequest().permitAll()
                 .and()
                 .csrf().disable()
                 .formLogin().disable()

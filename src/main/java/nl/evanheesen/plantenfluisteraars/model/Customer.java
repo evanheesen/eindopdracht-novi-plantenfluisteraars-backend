@@ -30,7 +30,7 @@ public class Customer {
     @Column(length = 120)
     public String city;
 
-    @Column(length = 120)
+    @Column(length = 120, nullable = false, unique = true)
     public String email;
 
     @Column(length = 15)

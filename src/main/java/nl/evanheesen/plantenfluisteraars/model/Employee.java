@@ -30,8 +30,11 @@ public class Employee {
     @Column(length = 120)
     public String city;
 
-    @Column(length = 120)
+    @Column(length = 120, nullable = false, unique = true)
     public String email;
+
+//    @Column(nullable = false, length = 80)
+//    private String password;
 
     @Column(length = 15)
     public String phone;
