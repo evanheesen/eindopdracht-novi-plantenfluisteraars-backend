@@ -4,23 +4,23 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name =  "aanvragen")
-public class Aanvraag {
+@Table(name = "gardens")
+public class Garden {
 
     // attributen
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    @EmbeddedId
+    GardenKey id;
 
     @ManyToOne
-    @MapsId("bewonerId")
-    @JoinColumn(name = "bewoner_id")
-    Bewoner bewoner;
+    @MapsId("customerId")
+    @JoinColumn(name = "customer_id")
+    Customer customer;
 
     @ManyToOne
-    @MapsId("plantenfluisteraarId")
-    @JoinColumn(name = "plantenfluisteraar_id")
-    Plantenfluisteraar plantenFluisteraar;
+    @MapsId("employeeId")
+    @JoinColumn(name = "employees_id")
+    Employee employee;
 
     @Column(length = 12)
     public LocalDate date;
@@ -37,19 +37,33 @@ public class Aanvraag {
     @Column(length = 120)
     public String city;
 
+    // Hier nog aparte klasse van maken met one-to-many relatie?
     @Column(length = 1)
     public byte packagePlants;
 
-//    public long customer_id;
-//    public long plantWhisperer_Id;
-
     // getters and setters
-    public long getId() {
+    public GardenKey getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(GardenKey id) {
         this.id = id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public LocalDate getDate() {

@@ -1,19 +1,19 @@
 package nl.evanheesen.plantenfluisteraars.controller;
 
-import nl.evanheesen.plantenfluisteraars.repository.AanvraagRepository;
+import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AanvragenController {
+public class GardensController {
 
     @Autowired
-    AanvraagRepository aanvraagRepository;
+    GardenRepository gardenRepository;
 
     @GetMapping(value = "/aanvragen")
     ResponseEntity getAllAanvragen() {
-        return ResponseEntity.ok(aanvraagRepository.findAll());
+        return ResponseEntity.ok(gardenRepository.findAll());
     }
 }

@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "bewoners")
-public class Bewoner {
+@Table(name = "customers")
+public class Customer {
 
     // attributen
     @Id
@@ -34,10 +34,10 @@ public class Bewoner {
     public String email;
 
     @Column(length = 15)
-    public long phone;
+    public String phone;
 
-    @OneToMany(mappedBy = "bewoner")
-    List<Aanvraag> aanvragen;
+    @OneToMany(mappedBy = "customer")
+    List<Garden> gardens;
 
     // getters and setters
     public long getId() {
@@ -104,11 +104,19 @@ public class Bewoner {
         this.email = email;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<Garden> getGardens() {
+        return gardens;
+    }
+
+    public void setGardens(List<Garden> gardens) {
+        this.gardens = gardens;
     }
 }

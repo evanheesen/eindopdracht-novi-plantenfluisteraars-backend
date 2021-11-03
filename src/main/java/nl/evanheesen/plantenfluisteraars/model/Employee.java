@@ -1,12 +1,11 @@
 package nl.evanheesen.plantenfluisteraars.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "plantenfluisteraars")
-public class Plantenfluisteraar {
+@Table(name = "employees")
+public class Employee {
 
     // attributen
     @Id
@@ -14,7 +13,10 @@ public class Plantenfluisteraar {
     public long id;
 
     @Column(length = 80)
-    public String name;
+    public String firstName;
+
+    @Column(length = 80)
+    public String lastName;
 
     @Column(length = 150)
     public String street;
@@ -31,11 +33,11 @@ public class Plantenfluisteraar {
     @Column(length = 120)
     public String email;
 
-    @Column(length = 12)
-    public long phone;
+    @Column(length = 15)
+    public String phone;
 
-    @OneToMany(mappedBy = "plantenfluisteraar")
-    List<Aanvraag> aanvragen;
+    @OneToMany(mappedBy = "employee")
+    List<Garden> gardens;
 
 //    @Column(length = 150)
 //    public String photo_location;
@@ -56,12 +58,20 @@ public class Plantenfluisteraar {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getStreet() {
@@ -104,15 +114,23 @@ public class Plantenfluisteraar {
         this.email = email;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-//    public String getPhoto_location() {
+    public List<Garden> getGardens() {
+        return gardens;
+    }
+
+    public void setGardens(List<Garden> gardens) {
+        this.gardens = gardens;
+    }
+
+    //    public String getPhoto_location() {
 //        return photo_location;
 //    }
 

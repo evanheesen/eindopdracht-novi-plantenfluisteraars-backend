@@ -1,8 +1,8 @@
-package nl.evanheesen.plantenfluisteraars.security;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
+//package nl.evanheesen.plantenfluisteraars.security;
+//
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.stereotype.Service;
+//
 //@Service
 //public class JwtUtil {
 //

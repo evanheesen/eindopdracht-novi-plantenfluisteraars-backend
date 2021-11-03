@@ -1,27 +1,27 @@
-//package nl.evanheesen.plantenfluisteraars.security;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-//import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//
-//import static org.springframework.http.HttpMethod.*;
-//
-//@Configuration
-//@EnableWebSecurity
+package nl.evanheesen.plantenfluisteraars.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.http.HttpMethod.*;
+
+@Configuration
+@EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
-//public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-//
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
 //    private DataSource dataSource;
 //    private JwtRequestFilter jwtRequestFilter;
 //
@@ -31,14 +31,14 @@
 //        this.jwtRequestFilter = jwtRequestFilter;
 //    }
 //
-//    //    inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth)
-//            throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("user").password("password").roles("USER").and()
-//                .withUser("admin").password("password").roles("USER", "ADMIN");
-//    }
+    //    inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("user").password("{noop}password").roles("USER").and()
+                .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
+    }
 //
 //// jdbcAuthentication:
 ////    @Autowired
@@ -70,30 +70,32 @@
 //
 //
 //
-//    // Authentication: endpoints en roles nog aanpassen!!
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//
-//        http
-//                .httpBasic()
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers(PATCH,"/users/{^[\\w]$}/password").authenticated()
-//                .antMatchers("/users/**").hasRole("ADMIN")
-//                .antMatchers("/customers/**").hasRole("USER")
-//                .antMatchers(POST,"/authenticate").permitAll()
-//                .antMatchers(GET,"/public").permitAll()
+    // Authentication: endpoints en roles nog aanpassen!!
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers(PATCH,"/users/{^[\\w]$}/password").authenticated()
+                .antMatchers("/bewoners/**").hasRole("USER")
+                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("EMPLOYEE")
+                .antMatchers(POST,"/authenticate").permitAll()
+                .antMatchers(GET,"/public").permitAll()
 //                .anyRequest().denyAll()
-//                .and()
-//                .csrf().disable()
-//                .formLogin().disable()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-////        Toevoegen RequestFilter aan Request chain:
+                // permit all later verwijderen!
+                .anyRequest().permitAll()
+                .and()
+                .csrf().disable()
+                .formLogin().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+//        Toevoegen RequestFilter aan Request chain:
 //        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//    }
-//
-//}
+
+    }
+
+}
