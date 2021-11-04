@@ -26,56 +26,57 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 
-//        inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}password").roles("USER").and()
-                .withUser("employee").password("{noop}password").roles("EMPLOYEE").and()
-                .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
-    }
-
-//private DataSource dataSource;
-//    private JwtRequestFilter jwtRequestFilter;
+////        inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
+//    @Override
 //
-//    @Autowired
-//    WebSecurityConfiguration(DataSource dataSource, JwtRequestFilter jwtRequestFilter) {
-//        this.dataSource = dataSource;
-//        this.jwtRequestFilter = jwtRequestFilter;
+//    protected void configure(AuthenticationManagerBuilder auth)
+//            throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password("{noop}password").roles("USER").and()
+//                .withUser("employee").password("{noop}password").roles("EMPLOYEE").and()
+//                .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
 //    }
-//// jdbcAuthentication:
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
+private DataSource dataSource;
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
+    WebSecurityConfiguration(DataSource dataSource, JwtRequestFilter jwtRequestFilter) {
+        this.dataSource = dataSource;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
+// jdbcAuthentication:
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
 // Nog data sql bestand vullen met juiste user gegevens en authorities!!
-//        auth.jdbcAuthentication().dataSource(dataSource)
-//                // Dit niet noodzakelijk, maar is om meer duidelijkheid te verschaffen:
-//                .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username=?")
-//                .authoritiesByUsernameQuery("SELECT username, authority FROM authorities AS a WHERE username=?");
-//
-//    }
+        auth.jdbcAuthentication().dataSource(dataSource)
+                // Dit niet noodzakelijk, maar is om meer duidelijkheid te verschaffen:
+                .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username=?")
+                .authoritiesByUsernameQuery("SELECT username, authority FROM authorities AS a WHERE username=?");
+
+    }
 
 // Activeren password encoder (sla de wachtwoorden in data sql op als Bcript (bcript-generator.com) gecodeerde wachtwoorden:
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-//
-//    @Bean
-//    @Override
-//    public UserDetailsService userDetailsServiceBean() throws Exception {
-//        return super.userDetailsServiceBean();
-//    }
-//
-//
-//
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsServiceBean() throws Exception {
+        return super.userDetailsServiceBean();
+    }
+
+
+
     // Authentication: endpoints en roles nog aanpassen!!
     @Override
     protected void configure(HttpSecurity http) throws Exception {

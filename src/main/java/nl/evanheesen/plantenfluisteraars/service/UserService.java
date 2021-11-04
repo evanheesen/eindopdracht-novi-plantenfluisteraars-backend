@@ -23,7 +23,7 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
     @Autowired
