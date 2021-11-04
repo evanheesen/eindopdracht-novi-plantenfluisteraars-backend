@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.sql.DataSource;
+
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -22,25 +24,26 @@ import static org.springframework.http.HttpMethod.*;
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    private DataSource dataSource;
-//    private JwtRequestFilter jwtRequestFilter;
-//
-//    @Autowired
-//    WebSecurityConfiguration(DataSource dataSource, JwtRequestFilter jwtRequestFilter) {
-//        this.dataSource = dataSource;
-//        this.jwtRequestFilter = jwtRequestFilter;
-//    }
-//
+
+
     //    inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}password").roles("USER").and()
-                .withUser("employee").password("{noop}password").roles("EMPLOYEE").and()
-                .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth)
+//            throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password("{noop}password").roles("USER").and()
+//                .withUser("employee").password("{noop}password").roles("EMPLOYEE").and()
+//                .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
+//    }
+
+private DataSource dataSource;
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
+    WebSecurityConfiguration(DataSource dataSource, JwtRequestFilter jwtRequestFilter) {
+        this.dataSource = dataSource;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
-//
 //// jdbcAuthentication:
 ////    @Autowired
 ////    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
