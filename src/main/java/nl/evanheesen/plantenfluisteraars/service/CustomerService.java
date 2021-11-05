@@ -17,4 +17,6 @@ public interface CustomerService {
 
     public void deleteCustomer(long id);
 
+    public void assignUserToCustomer(String userId, long customerId);
+
 }

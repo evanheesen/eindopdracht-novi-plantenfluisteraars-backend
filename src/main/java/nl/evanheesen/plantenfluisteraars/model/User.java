@@ -21,6 +21,9 @@ public class User {
     @Column
     private String email;
 
+    @OneToOne(mappedBy = "user")
+    Customer customer;
+
     @OneToMany(
             targetEntity = Authority.class,
             mappedBy = "username",
@@ -59,6 +62,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Set<Authority> getAuthorities() {

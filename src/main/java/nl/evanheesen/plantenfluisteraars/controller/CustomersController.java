@@ -57,6 +57,11 @@ public class CustomersController {
         return ResponseEntity.noContent().build();
     }
 
+//    endpoint niet perse nodig voor deze relatie, later nog de assignUserToCustomer methode aanroepen in de POST request endpoint?
+    @PutMapping("/bewoners/{id}/users/{name}")
+    public void assignUserToCustomer(@PathVariable("id") long customerId, @PathVariable("name") String userId) {
+        customerServiceImpl.assignUserToCustomer(userId, customerId);
+    }
 
 //    @GetMapping("/bewoners?status={status}")
 //    public ResponseEntity<Object> getAllBewoners(@RequestParam String status) {

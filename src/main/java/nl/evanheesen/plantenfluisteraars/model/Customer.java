@@ -36,6 +36,9 @@ public class Customer {
     @Column(length = 15)
     public String phone;
 
+    @OneToOne
+    User user;
+
     @OneToMany(mappedBy = "customer")
     List<Garden> gardens;
 
@@ -110,6 +113,14 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Garden> getGardens() {

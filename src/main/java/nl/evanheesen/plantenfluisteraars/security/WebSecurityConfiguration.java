@@ -21,9 +21,8 @@ import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
 
 
 ////        inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
@@ -89,11 +88,12 @@ private DataSource dataSource;
                 .antMatchers(PATCH,"/users/{^[\\w]$}/password").authenticated()
                 .antMatchers("/bewoners/**").hasRole("USER")
 //                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("EMPLOYEE")
-                .antMatchers(GET,"/plantenfluisteraars/**").permitAll()
-//                .antMatchers(POST,"/authenticate").permitAll()
+                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("USER")
+                .antMatchers(GET,"/users/**").hasRole("ADMIN")
+//                !! Dit nog aanpassen?
+                .antMatchers(POST,"/authenticate").permitAll()
                 .antMatchers(GET,"/public").permitAll()
-//                .anyRequest().denyAll()
-                // permit all later verwijderen!
+                .anyRequest().denyAll()
 //                .anyRequest().permitAll()
                 .and()
                 .csrf().disable()
@@ -102,7 +102,7 @@ private DataSource dataSource;
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 //        Toevoegen RequestFilter aan Request chain:
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
+import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 //    @Autowired
     private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
 //    Moderne manier in plaats van @Autowired:
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository) {
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
 //    @Autowired
@@ -75,6 +78,20 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteCustomer(long id) {
         if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
         customerRepository.deleteById(id);
+    }
+
+    @Override
+    public void assignUserToCustomer(String userId, long customerId) {
+        var optionalUser = userRepository.findById(userId);
+        var optionalCustomer = customerRepository.findById(customerId);
+        if (optionalUser.isPresent() && optionalCustomer.isPresent()) {
+            var user = optionalUser.get();
+            var customer = optionalCustomer.get();
+            customer.setUser(user);
+            customerRepository.save(customer);
+        } else {
+            throw new RecordNotFoundException();
+        }
     }
 
 

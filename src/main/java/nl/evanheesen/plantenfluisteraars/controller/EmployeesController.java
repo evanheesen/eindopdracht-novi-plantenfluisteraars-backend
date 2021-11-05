@@ -4,6 +4,7 @@ import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 @RestController
 public class EmployeesController {
 
-    private EmployeeService employeeService;
+    private EmployeeServiceImpl employeeServiceImpl;
 
     @Autowired
     public EmployeesController(EmployeeService employeeService) {
@@ -50,6 +51,11 @@ public class EmployeesController {
     public ResponseEntity<Object> deleteEmployee(@PathVariable("id") long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/plantenfluisteraars/{id}/users/{name}")
+    public void assignUserToEmployee(@PathVariable("id") long employeeId, @PathVariable("name") String userId) {
+        employeeServiceImpl
     }
 
 }

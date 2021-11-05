@@ -69,7 +69,8 @@ public class UserService {
 
             User newUser = userRepository.save(user);
             return newUser.getUsername();
-        } catch (Exception ex) {
+        }
+         catch (Exception ex) {
             throw new BadRequestException("Kan de gebruiker niet aanmaken");
         }
     }
@@ -122,12 +123,14 @@ public class UserService {
     }
 
     public void addAuthority(String username, String authorityString) {
+// Ophalen user:
         Optional<User> userOptional = userRepository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException();
         }
         else {
             User user = userOptional.get();
+// Toevoegen authority:
             user.addAuthority(authorityString);
             userRepository.save(user);
         }

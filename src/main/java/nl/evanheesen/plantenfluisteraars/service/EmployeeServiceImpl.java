@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
+import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     //    @Autowired
     private EmployeeRepository employeeRepository;
+    private UserRepository userRepository;
 
     //    Moderne manier in plaats van @Autowired:
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, UserRepository userRepository) {
         this.employeeRepository = employeeRepository;
+        this.userRepository = userRepository;
     }
 
 //    @Autowired
@@ -81,6 +84,20 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RecordNotFoundException();
         }
         employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public void assignUserToEmployee(String userId, long employeeId) {
+       var optionalUser = userRepository.findById(userId);
+       var optionalEmployee = employeeRepository.findById(employeeId);
+       if (optionalUser.isPresent() && optionalEmployee.isPresent()) {
+           var user = optionalUser.get();
+           var employee = optionalEmployee.get();
+           employee.setUser(user);
+           employeeRepository.save(employee);
+       } else {
+           throw new RecordNotFoundException();
+       }
     }
 
 }
