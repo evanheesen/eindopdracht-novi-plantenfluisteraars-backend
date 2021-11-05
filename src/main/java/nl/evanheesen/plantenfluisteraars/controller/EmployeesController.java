@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 public class EmployeesController {
 
-    private EmployeeServiceImpl employeeServiceImpl;
+    private EmployeeService employeeService;
 
     @Autowired
     public EmployeesController(EmployeeService employeeService) {
@@ -55,7 +55,7 @@ public class EmployeesController {
 
     @PutMapping("/plantenfluisteraars/{id}/users/{name}")
     public void assignUserToEmployee(@PathVariable("id") long employeeId, @PathVariable("name") String userId) {
-        employeeServiceImpl
+        employeeService.assignUserToEmployee(userId, employeeId);
     }
 
 }

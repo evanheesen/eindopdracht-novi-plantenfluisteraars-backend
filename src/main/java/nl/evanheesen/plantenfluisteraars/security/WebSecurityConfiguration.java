@@ -86,9 +86,9 @@ private DataSource dataSource;
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers(PATCH,"/users/{^[\\w]$}/password").authenticated()
-                .antMatchers("/bewoners/**").hasRole("USER")
+//                .antMatchers("/bewoners/**").hasRole("USER")
 //                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("EMPLOYEE")
-                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("USER")
+                .antMatchers("/plantenfluisteraars/**").hasRole("USER")
                 .antMatchers(GET,"/users/**").hasRole("ADMIN")
 //                !! Dit nog aanpassen?
                 .antMatchers(POST,"/authenticate").permitAll()
