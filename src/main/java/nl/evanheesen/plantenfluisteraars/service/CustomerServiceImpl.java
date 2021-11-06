@@ -39,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public long createCustomer(Customer customer) {
         Customer newCustomer = customerRepository.save(customer);
+
         return newCustomer.getId();
     }
 

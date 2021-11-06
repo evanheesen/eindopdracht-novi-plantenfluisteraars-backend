@@ -13,7 +13,7 @@ public class GardensController {
     GardenRepository gardenRepository;
 
     @GetMapping(value = "/aanvragen")
-    ResponseEntity getAllAanvragen() {
+    ResponseEntity getAllGardens() {
         return ResponseEntity.ok(gardenRepository.findAll());
     }
 }

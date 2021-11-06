@@ -24,12 +24,6 @@ public class CustomersController {
         return ResponseEntity.ok().body(customerServiceImpl.getCustomers());
     }
 
-//    Test voor secure. Later weghalen!!
-    @GetMapping("/secure/bewoners") // get collection
-    public ResponseEntity<Object> getCustomersByAdmin() {
-        return ResponseEntity.ok().body(customerServiceImpl.getCustomers());
-    }
-
     @GetMapping("/bewoners/{id}") // get item
     public ResponseEntity<Object> getCustomer(@PathVariable long id) {
         return ResponseEntity.ok().body(customerServiceImpl.getCustomerById(id));
@@ -58,6 +52,8 @@ public class CustomersController {
     }
 
 //    endpoint niet perse nodig voor deze relatie, later nog de assignUserToCustomer methode aanroepen in de POST request endpoint?
+//    Dit is alleen te gebruiken als er al een bewoner is en een userId (username) bekend is.
+
     @PutMapping("/bewoners/{id}/users/{name}")
     public void assignUserToCustomer(@PathVariable("id") long customerId, @PathVariable("name") String userId) {
         customerServiceImpl.assignUserToCustomer(userId, customerId);
