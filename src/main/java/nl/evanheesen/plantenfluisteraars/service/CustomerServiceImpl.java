@@ -24,9 +24,6 @@ public class CustomerServiceImpl implements CustomerService {
         this.userRepository = userRepository;
     }
 
-//    @Autowired
-//    private BewonersController bewonersController;
-
     public Iterable<Customer> getCustomers() {
         Iterable<Customer> customers = customerRepository.findAll();
         return customers;
