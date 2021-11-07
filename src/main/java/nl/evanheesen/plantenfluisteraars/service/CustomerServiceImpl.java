@@ -64,10 +64,6 @@ public class CustomerServiceImpl implements CustomerService {
                     customer.setPhone((String) fields.get(field));
                     break;
 
-                    // hoe phone (type long) aan te passen?
-//                case "phone":
-//                    bewoner.setPhone((long) fields.get(field));
-//                    break;
             }
         }
         customerRepository.save(customer);
