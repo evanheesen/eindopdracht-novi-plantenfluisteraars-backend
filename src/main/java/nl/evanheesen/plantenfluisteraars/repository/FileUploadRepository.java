@@ -1,7 +1,9 @@
 package nl.evanheesen.plantenfluisteraars.repository;
 
-import nl.evanheesen.plantenfluisteraars.model.File;
-import org.springframework.data.repository.CrudRepository;
+import nl.evanheesen.plantenfluisteraars.model.DBFile;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface FileUploadRepository extends CrudRepository<File, Long> {
+@Repository
+public interface FileUploadRepository extends JpaRepository<DBFile, String> {
 }

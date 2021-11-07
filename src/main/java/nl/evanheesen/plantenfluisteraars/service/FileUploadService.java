@@ -1,48 +1,41 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
-import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
-import nl.evanheesen.plantenfluisteraars.model.File;
+import nl.evanheesen.plantenfluisteraars.exception.FileStorageException;
+import nl.evanheesen.plantenfluisteraars.model.DBFile;
 import nl.evanheesen.plantenfluisteraars.repository.FileUploadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
+import java.io.IOException;
 
+@Service
 public class FileUploadService {
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
 
-//    Deze in principe niet nodig voor mijn applicatie:
-//    public Iterable<File> getFiles() {
-//        return fileRepository.findAll();
-//    }
+    public DBFile storeFile(MultipartFile file) {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-    public long uploadFile(MultipartFile file) {
+        try {
+            // Check if the name of the file has no invalid characters
+            if(fileName.contains("..")) {
+                throw new FileStorageException("De bestandsnaam bevat ongeldige karakters " + fileName);
+            }
 
-        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+            DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
 
-        File newFileToStore = new File();
-        newFileToStore.setFileName(originalFileName);
-
-        File storedFile = fileUploadRepository.save(newFileToStore);
-
-        return storedFile.getId();
+            return fileUploadRepository.save(dbFile);
+        } catch (IOException ex) {
+            throw new FileStorageException("Kan het bestand niet opslaan " + fileName + ". Probeer het opnieuw!", ex);
+        }
     }
 
-    public void deleteFile(long id) {
-        if (!fileUploadRepository.existsById(id)) throw new RecordNotFoundException();
-        fileUploadRepository.deleteById(id);
-    }
-
-    public Optional<File> getFileById(long id) {
-        if (!fileUploadRepository.existsById(id)) throw new RecordNotFoundException();
-        return fileUploadRepository.findById(id);
-    }
-
-//    public boolean fileExistsById(long id) {
-//        return fileRepository.existsById(id);
+//    public File getFile(String fileId) {
+//        return FileUploadRepository.findById(fileId)
+//                .orElseThrow(() -> new FileNotFoundException("Bestand niet gevonden met dit id " + fileId));
 //    }
 
 }
