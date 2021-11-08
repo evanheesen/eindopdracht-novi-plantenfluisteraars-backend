@@ -20,6 +20,10 @@ public class DBFile {
     @Lob
     private byte[] data;
 
+//    Relatie met Plantenfluisteraar. Nog checken of dit de goede fetch type is!!
+    @OneToOne(mappedBy = "dbFile")
+    Employee employee;
+
     public DBFile() {
     }
 

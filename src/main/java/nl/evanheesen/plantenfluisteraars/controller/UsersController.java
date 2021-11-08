@@ -75,6 +75,12 @@ public class UsersController {
         return ResponseEntity.noContent().build();
     }
 
+//    Dit werkt nog niet!! Krijg 500 Internal Service error
+    @PutMapping("/{username}/plantenfluisteraars/{id}")
+    public void assignEmployeeToUser(@PathVariable("id") long employeeId, @PathVariable("username") String username) {
+        userService.assignEmployeeToUser(username, employeeId);
+    }
+
 //    @PatchMapping(value = "/{username}/password")
 //    public ResponseEntity<Object> setPassword(@PathVariable("username") String username, @RequestBody String password) {
 //        userService.setPassword(username, password);

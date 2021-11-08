@@ -6,6 +6,7 @@ import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Authority;
 import nl.evanheesen.plantenfluisteraars.model.User;
+import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import nl.evanheesen.plantenfluisteraars.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,13 @@ import java.util.Set;
 public class UserService {
 
     private final UserRepository userRepository;
+    private EmployeeRepository employeeRepository;
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -50,10 +53,6 @@ public class UserService {
         return userRepository.existsById(username);
     }
 
-//    aanmaken authority op basis van endpoint
-//    public String setCustomerAuthority(UserPostRequest userPostRequest) {
-//    }
-
     public String createUser(UserPostRequest userPostRequest) {
         try {
             String encryptedPassword = passwordEncoder.encode(userPostRequest.getPassword());
@@ -64,7 +63,6 @@ public class UserService {
             user.setEmail(userPostRequest.getEmail());
             user.setEnabled(true);
             user.addAuthority("ROLE_USER");
-
             User newUser = userRepository.save(user);
             return newUser.getUsername();
         }
@@ -143,6 +141,19 @@ public class UserService {
             User user = userOptional.get();
             user.removeAuthority(authorityString);
             userRepository.save(user);
+        }
+    }
+
+    public void assignEmployeeToUser(String username, long employeeId) {
+        var optionalUser = userRepository.findById(username);
+        var optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalUser.isPresent() && optionalEmployee.isPresent()) {
+            var user = optionalUser.get();
+            var employee = optionalEmployee.get();
+            user.setEmployee(employee);
+            userRepository.save(user);
+        } else {
+            throw new RecordNotFoundException();
         }
     }
 

@@ -24,6 +24,10 @@ public class User {
 //    @OneToOne(mappedBy = "user")
 //    Customer customer;
 
+    @OneToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private Employee employee;
+
     @OneToMany(
             targetEntity = Authority.class,
             mappedBy = "username",
@@ -63,7 +67,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-//
+
 //    public Customer getCustomer() {
 //        return customer;
 //    }
@@ -71,6 +75,14 @@ public class User {
 //    public void setCustomer(Customer customer) {
 //        this.customer = customer;
 //    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     public Set<Authority> getAuthorities() {
         return authorities;
@@ -83,12 +95,15 @@ public class User {
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }
+
     public void addAuthority(String authorityString) {
         this.authorities.add(new Authority(this.username, authorityString));
     }
+
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
     }
+
     public void removeAuthority(String authorityString) {
         this.authorities.removeIf(authority -> authority.getAuthority().equalsIgnoreCase(authorityString));
     }
