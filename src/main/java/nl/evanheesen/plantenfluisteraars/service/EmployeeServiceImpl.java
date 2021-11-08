@@ -70,10 +70,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employee.setPhone((String) fields.get(field));
                     break;
 
-                // hoe phone (type long) aan te passen?
-//                case "phone":
-//                    bewoner.setPhone((long) fields.get(field));
-//                    break;
             }
         }
         employeeRepository.save(employee);
@@ -85,6 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         employeeRepository.deleteById(id);
     }
+
 
 //    @Override
 //    public void assignEmployeeToUser(String username, long employeeId) {

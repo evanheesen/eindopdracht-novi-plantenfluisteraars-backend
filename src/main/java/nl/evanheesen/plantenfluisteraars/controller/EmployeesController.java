@@ -1,6 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.controller;
 
 import nl.evanheesen.plantenfluisteraars.model.Employee;
+import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class EmployeesController {
     }
 
     @PostMapping(value = "/plantenfluisteraars")
-    public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Object> createEmployee(@RequestBody Employee employee, User user) {
         long newId = employeeService.createEmployee(employee);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/plantenfluisteraars/{id}")
@@ -52,6 +53,8 @@ public class EmployeesController {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
 //    @PutMapping("/plantenfluisteraars/{id}/users/{username}")
 //    public void assignEmployeeToUser(@PathVariable("id") long employeeId, @PathVariable("username") String username) {

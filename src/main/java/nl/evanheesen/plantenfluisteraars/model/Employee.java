@@ -130,7 +130,15 @@ public class Employee {
         this.phone = phone;
     }
 
-//    public User getUser() {
+    public DBFile getDBFile() {
+        return dbFile;
+    }
+
+    public void setDBFile(DBFile dbFile) {
+        this.dbFile = dbFile;
+    }
+
+    //    public User getUser() {
 //        return user;
 //    }
 //

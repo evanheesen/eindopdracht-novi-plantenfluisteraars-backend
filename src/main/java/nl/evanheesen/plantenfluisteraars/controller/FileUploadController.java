@@ -18,9 +18,11 @@ public class FileUploadController {
     @Autowired
     private FileUploadService fileUploadService;
 
-    @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/plantenfluisteraars/{id}/uploadFile")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id") long employeeId) {
         DBFile dbFile = fileUploadService.storeFile(file);
+        var dbFileId = dbFile.getId();
+        fileUploadService.assignFileToEmployee(dbFileId, employeeId);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
@@ -30,8 +32,6 @@ public class FileUploadController {
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
-
-
 
 //    GET Mapping voor ophalen bestand uit database
 

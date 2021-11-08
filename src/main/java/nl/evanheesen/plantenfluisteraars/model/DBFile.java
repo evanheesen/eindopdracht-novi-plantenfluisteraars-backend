@@ -20,9 +20,6 @@ public class DBFile {
     @Lob
     private byte[] data;
 
-    @OneToOne(mappedBy = "dbFile")
-    Employee employee;
-
     public DBFile() {
     }
 
@@ -63,4 +60,5 @@ public class DBFile {
     public void setData(byte[] data) {
         this.data = data;
     }
+
 }

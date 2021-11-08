@@ -1,7 +1,9 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
 import nl.evanheesen.plantenfluisteraars.exception.FileStorageException;
+import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.DBFile;
+import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.FileUploadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class FileUploadService {
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     public DBFile storeFile(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -30,6 +35,19 @@ public class FileUploadService {
             return fileUploadRepository.save(dbFile);
         } catch (IOException ex) {
             throw new FileStorageException("Kan het bestand niet opslaan " + fileName + ". Probeer het opnieuw!", ex);
+        }
+    }
+
+    public void assignFileToEmployee(String dbFileId, long employeeId) {
+        var optionalFile = fileUploadRepository.findById(dbFileId);
+        var optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalFile.isPresent() && optionalEmployee.isPresent()) {
+            var employee = optionalEmployee.get();
+            var file = optionalFile.get();
+            employee.setDBFile(file);
+            employeeRepository.save(employee);
+        } else {
+            throw new RecordNotFoundException();
         }
     }
 
