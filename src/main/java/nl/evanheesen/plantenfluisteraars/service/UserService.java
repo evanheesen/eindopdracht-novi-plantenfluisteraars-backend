@@ -50,6 +50,10 @@ public class UserService {
         return userRepository.existsById(username);
     }
 
+//    aanmaken authority op basis van endpoint
+//    public String setCustomerAuthority(UserPostRequest userPostRequest) {
+//    }
+
     public String createUser(UserPostRequest userPostRequest) {
         try {
             String encryptedPassword = passwordEncoder.encode(userPostRequest.getPassword());
@@ -60,12 +64,6 @@ public class UserService {
             user.setEmail(userPostRequest.getEmail());
             user.setEnabled(true);
             user.addAuthority("ROLE_USER");
-            for (String s : userPostRequest.getAuthorities()) {
-                if (!s.startsWith("ROLE_")) {
-                    s = "ROLE_" + s;
-                }
-                user.addAuthority(s);
-            }
 
             User newUser = userRepository.save(user);
             return newUser.getUsername();

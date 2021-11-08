@@ -20,14 +20,14 @@ public class FileUploadController {
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        DBFile DBFile = fileUploadService.storeFile(file);
+        DBFile dbFile = fileUploadService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
-                .path(DBFile.getId())
+                .path(dbFile.getId())
                 .toUriString();
 
-        return new UploadFileResponse(DBFile.getFileName(), fileDownloadUri,
+        return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
 

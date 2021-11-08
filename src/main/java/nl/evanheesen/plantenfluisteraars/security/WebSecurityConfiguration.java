@@ -91,6 +91,7 @@ private DataSource dataSource;
                 .antMatchers("/plantenfluisteraars/**").hasRole("USER")
                 .antMatchers(GET,"/users/**").hasRole("ADMIN")
 //                !! Dit nog aanpassen?
+                .antMatchers(POST,"/uploadFile").permitAll()
                 .antMatchers(POST,"/authenticate").permitAll()
                 .antMatchers(GET,"/public").permitAll()
                 .anyRequest().denyAll()
