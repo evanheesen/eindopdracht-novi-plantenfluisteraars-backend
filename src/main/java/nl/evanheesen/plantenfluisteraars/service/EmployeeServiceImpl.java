@@ -14,19 +14,14 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    //    @Autowired
     private EmployeeRepository employeeRepository;
     private UserRepository userRepository;
 
-    //    Moderne manier in plaats van @Autowired:
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, UserRepository userRepository) {
         this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
     }
-
-//    @Autowired
-//    private BewonersController bewonersController;
 
     public Iterable<Employee> getEmployees() {
         Iterable<Employee> employees = employeeRepository.findAll();
@@ -81,20 +76,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         employeeRepository.deleteById(id);
     }
-
-
-//    @Override
-//    public void assignEmployeeToUser(String username, long employeeId) {
-//       var optionalUser = userRepository.findById(username);
-//       var optionalEmployee = employeeRepository.findById(employeeId);
-//       if (optionalUser.isPresent() && optionalEmployee.isPresent()) {
-//           var user = optionalUser.get();
-//           var employee = optionalEmployee.get();
-//           employee.setUser(user);
-//           employeeRepository.save(employee);
-//       } else {
-//           throw new RecordNotFoundException();
-//       }
-//    }
 
 }

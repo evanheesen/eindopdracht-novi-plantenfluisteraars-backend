@@ -21,12 +21,13 @@ public class User {
     @Column
     private String email;
 
-//    @OneToOne(mappedBy = "user")
-//    Customer customer;
-
     @OneToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
+
+    @OneToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
 
     @OneToMany(
             targetEntity = Authority.class,
@@ -68,13 +69,13 @@ public class User {
         this.email = email;
     }
 
-//    public Customer getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
     public Employee getEmployee() {
         return employee;

@@ -80,6 +80,11 @@ public class UsersController {
         userService.assignEmployeeToUser(username, employeeId);
     }
 
+    @PutMapping("/{username}/bewoners/{id}")
+    public void assignCustomerToUser(@PathVariable("id") long customerId, @PathVariable("username") String username) {
+        userService.assignCustomerToUser(username, customerId);
+    }
+
 //    @PatchMapping(value = "/{username}/password")
 //    public ResponseEntity<Object> setPassword(@PathVariable("username") String username, @RequestBody String password) {
 //        userService.setPassword(username, password);

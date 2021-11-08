@@ -47,16 +47,6 @@ public class Employee {
 //    @OneToMany(mappedBy = "employee")
 //    List<Garden> gardens;
 
-//    @Column(length = 150)
-//    public String photo_location;
-
-//    List<Request> requests = new ArrayList<>();
-//
-//    // methoden
-//    void addRequest(Request request) {
-//        this.requests.add(request);
-//    }
-
     // getters and setters
     public long getId() {
         return id;
@@ -152,13 +142,5 @@ public class Employee {
 //
 //    public void setGardens(List<Garden> gardens) {
 //        this.gardens = gardens;
-//    }
-
-    //    public String getPhoto_location() {
-//        return photo_location;
-//    }
-
-//    public void setPhoto_location(String photo_location) {
-//        this.photo_location = photo_location;
 //    }
 }

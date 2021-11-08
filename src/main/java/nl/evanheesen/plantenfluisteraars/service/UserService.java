@@ -6,6 +6,7 @@ import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Authority;
 import nl.evanheesen.plantenfluisteraars.model.User;
+import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import nl.evanheesen.plantenfluisteraars.utils.RandomStringGenerator;
@@ -26,12 +27,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private EmployeeRepository employeeRepository;
+    private CustomerRepository customerRepository;
     PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
+        this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -151,6 +154,19 @@ public class UserService {
             var user = optionalUser.get();
             var employee = optionalEmployee.get();
             user.setEmployee(employee);
+            userRepository.save(user);
+        } else {
+            throw new RecordNotFoundException();
+        }
+    }
+
+    public void assignCustomerToUser(String username, long customerId) {
+        var optionalUser = userRepository.findById(username);
+        var optionalCustomer = customerRepository.findById(customerId);
+        if (optionalUser.isPresent() && optionalCustomer.isPresent()) {
+            var user = optionalUser.get();
+            var customer = optionalCustomer.get();
+            user.setCustomer(customer);
             userRepository.save(user);
         } else {
             throw new RecordNotFoundException();

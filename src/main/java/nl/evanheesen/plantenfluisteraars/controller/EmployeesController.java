@@ -54,11 +54,4 @@ public class EmployeesController {
         return ResponseEntity.noContent().build();
     }
 
-
-
-//    @PutMapping("/plantenfluisteraars/{id}/users/{username}")
-//    public void assignEmployeeToUser(@PathVariable("id") long employeeId, @PathVariable("username") String username) {
-//        employeeService.assignEmployeeToUser(username, employeeId);
-//    }
-
 }
