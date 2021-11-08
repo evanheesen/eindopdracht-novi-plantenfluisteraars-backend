@@ -31,6 +31,8 @@ public class FileUploadController {
                 file.getContentType(), file.getSize());
     }
 
+
+
 //    GET Mapping voor ophalen bestand uit database
 
 }

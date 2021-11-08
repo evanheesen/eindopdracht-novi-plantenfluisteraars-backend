@@ -75,7 +75,6 @@ public class UsersController {
         return ResponseEntity.noContent().build();
     }
 
-//    Dit werkt nog niet!! Krijg 500 Internal Service error
     @PutMapping("/{username}/plantenfluisteraars/{id}")
     public void assignEmployeeToUser(@PathVariable("id") long employeeId, @PathVariable("username") String username) {
         userService.assignEmployeeToUser(username, employeeId);
