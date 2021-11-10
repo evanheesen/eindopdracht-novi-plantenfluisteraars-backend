@@ -1,7 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import nl.evanheesen.plantenfluisteraars.model.DBFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerRequest {
+public class EmployeeRequest {
 
     private String username;
     @Size(min=6)
@@ -33,13 +33,6 @@ public class CustomerRequest {
     public String postalCode;
     public String city;
     public String phone;
-
-    @JsonIgnore
-    private final LocalDate submissionDate = LocalDate.now();
-
-//private String street;
-//private String houseNumber;
-//private String postalCode;
-//private String phone;
+    private DBFile dbFile;
 
 }

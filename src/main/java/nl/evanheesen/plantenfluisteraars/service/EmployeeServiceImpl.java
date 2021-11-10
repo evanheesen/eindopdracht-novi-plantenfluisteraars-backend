@@ -1,6 +1,9 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
+import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
+import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
+import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
@@ -75,6 +78,15 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RecordNotFoundException();
         }
         employeeRepository.deleteById(id);
+    }
+
+    public Employee convertDTOToEmployee(EmployeeRequest employeeRequest) {
+        Employee employee = new Employee();
+        employee.setFirstName(employeeRequest.getFirstName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setPhone(employeeRequest.getPhone());
+//        set here the DBFile from DTO or in FileUploadService
+        return employee;
     }
 
 }

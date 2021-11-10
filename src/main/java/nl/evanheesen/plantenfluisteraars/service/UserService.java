@@ -1,6 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
+import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
 import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
@@ -189,6 +190,24 @@ public class UserService {
             user.setUsername(customerRequest.getUsername());
             user.setPassword(encryptedPassword);
             user.setEmail(customerRequest.getEmail());
+            user.setEnabled(true);
+            user.addAuthority("ROLE_USER");
+            User newUser = userRepository.save(user);
+            return newUser.getUsername();
+        }
+        catch (Exception ex) {
+            throw new BadRequestException("Kan de gebruiker niet aanmaken");
+        }
+    }
+
+    public String createEmployeeUser(EmployeeRequest employeeRequest) {
+        try {
+            String encryptedPassword = passwordEncoder.encode(employeeRequest.getPassword());
+
+            User user = new User();
+            user.setUsername(employeeRequest.getUsername());
+            user.setPassword(encryptedPassword);
+            user.setEmail(employeeRequest.getEmail());
             user.setEnabled(true);
             user.addAuthority("ROLE_USER");
             User newUser = userRepository.save(user);

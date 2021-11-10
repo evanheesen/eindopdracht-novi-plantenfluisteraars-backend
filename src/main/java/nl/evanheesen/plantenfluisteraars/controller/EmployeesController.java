@@ -1,8 +1,10 @@
 package nl.evanheesen.plantenfluisteraars.controller;
 
+import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.service.EmployeeService;
+import nl.evanheesen.plantenfluisteraars.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
@@ -13,42 +15,49 @@ import java.net.URI;
 import java.util.Map;
 
 @RestController
+@RequestMapping(value = "/plantenfluisteraars")
 public class EmployeesController {
 
     private EmployeeService employeeService;
+    private UserService userService;
 
     @Autowired
-    public EmployeesController(EmployeeService employeeService) {
+    public EmployeesController(EmployeeService employeeService, UserService userService) {
         this.employeeService = employeeService;
+        this.userService = userService;
     }
 
-    @GetMapping("/plantenfluisteraars") // get collection
+    @GetMapping("") // get collection
     public ResponseEntity<Object> getEmployees() {
         return ResponseEntity.ok().body(employeeService.getEmployees());
     }
 
-    @GetMapping("/plantenfluisteraars/{id}") // get item
+    @GetMapping("/{id}") // get item
     public ResponseEntity<Object> getEmployeeById(@PathVariable long id) {
         return ResponseEntity.ok().body(employeeService.getEmployeeById(id));
     }
 
-    @PostMapping(value = "/plantenfluisteraars")
-    public ResponseEntity<Object> createEmployee(@RequestBody Employee employee, User user) {
-        long newId = employeeService.createEmployee(employee);
+    @PostMapping(value = "")
+    public ResponseEntity<Object> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
+//        convert DTO to entity
+        Employee employee = employeeService.convertDTOToEmployee(employeeRequest);
+        String username = userService.createEmployeeUser(employeeRequest);
+        long employeeId = employeeService.createEmployee(employee);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/plantenfluisteraars/{id}")
-                .buildAndExpand(newId).toUri();
+                .buildAndExpand(employeeId).toUri();
 
+        userService.assignEmployeeToUser(username, employeeId);
         return ResponseEntity.created(location).body(location);
     }
 
-    @PatchMapping(value = "/plantenfluisteraars/{id}")
+    @PatchMapping(value = "/{id}")
     public ResponseEntity<Object> updateEmployeePartial(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
         employeeService.partialUpdateEmployee(id, fields);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/plantenfluisteraars/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteEmployee(@PathVariable("id") long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();

@@ -45,7 +45,7 @@ public class FileUploadService {
         if (optionalFile.isPresent() && optionalEmployee.isPresent()) {
             var employee = optionalEmployee.get();
             var file = optionalFile.get();
-            employee.setDBFile(file);
+            employee.setDbFile(file);
             employeeRepository.save(employee);
         } else {
             throw new RecordNotFoundException();

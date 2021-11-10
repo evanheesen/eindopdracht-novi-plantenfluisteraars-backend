@@ -1,5 +1,6 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
+import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 
 import java.util.Map;
@@ -16,5 +17,7 @@ public interface EmployeeService {
     public void partialUpdateEmployee(long id, Map<String, String> fields);
 
     public void deleteEmployee(long id);
+
+    public Employee convertDTOToEmployee(EmployeeRequest employeeRequest);
 
 }

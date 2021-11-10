@@ -9,5 +9,6 @@ import java.util.Collection;
 
 public interface GardenRepository extends JpaRepository<Garden, Long> {
     Collection<Garden> findAllByEmployeeId(long employeeId);
-    Collection<Garden> findAllByCustomerId(long customerId);
+    Collection<Garden> findAllByCustomerId(String username);
+    Collection<Garden> findAllByStatusIgnoreCase(String status);
 }

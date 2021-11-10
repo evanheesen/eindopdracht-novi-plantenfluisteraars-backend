@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class GetGardensResponse {
+public class GardensOnlyResponse {
 
 
 //    #### Nu te doen: kijken hoe je deze DTO omzet en meegeeft in GET request
@@ -23,7 +23,7 @@ public class GetGardensResponse {
     private byte packagePlants;
     private Employee employee;
 
-    public GetGardensResponse(LocalDate submissionDate, String status, String street, String houseNumber, String postalCode, String city, Employee employee) {
+    public GardensOnlyResponse(LocalDate submissionDate, String status, String street, String houseNumber, String postalCode, String city, Employee employee) {
         this.submissionDate = submissionDate;
         this.status = status;
         this.street = street;

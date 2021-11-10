@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/aanvragen")
@@ -31,25 +32,36 @@ public class GardensController {
         return ResponseEntity.ok().body(gardenService.getAllGardens());
     }
 
+    @GetMapping("/status/{status}")
+    ResponseEntity getGardensByStatus(@PathVariable String status) {
+        return ResponseEntity.ok().body(gardenService.getGardensByStatus(status));
+    }
+
     @GetMapping("/plantenfluisteraars/{id}")
     public ResponseEntity<Object> getGardensByEmployeeId(@PathVariable long id) {
         return ResponseEntity.ok().body(gardenService.getGardensByEmployeeId(id));
     }
 
-    @GetMapping("/bewoners/{id}")
-    public ResponseEntity<Object> getGardensByCustomerId(@PathVariable long id) {
-        return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(id));
+    @GetMapping("/bewoners/{username}")
+    public ResponseEntity<Object> getGardensByCustomerId(@PathVariable String username) {
+        return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(username));
     }
 
-    @PostMapping("")
-    public ResponseEntity<Object> addGarden(@RequestBody Garden garden) {
-        long newId = gardenService.addGarden(garden);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/gardens/{id}")
-                .buildAndExpand(newId).toUri();
-
-        return ResponseEntity.created(location).body(location);
+    @PatchMapping(value = "{gardenId}/plantenfluisteraars/{id}")
+    public ResponseEntity<Object> addEmployeeToGarden(@PathVariable("gardenId") long gardenId, @PathVariable("id") long id, @RequestBody Map<String, String> fields) {
+        gardenService.addEmployeeToGarden(gardenId, id, fields);
+        return ResponseEntity.noContent().build();
     }
+
+//    @PostMapping("")
+//    public ResponseEntity<Object> addGarden(@RequestBody Garden garden) {
+//        long newId = gardenService.addGarden(garden);
+//
+//        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/gardens/{id}")
+//                .buildAndExpand(newId).toUri();
+//
+//        return ResponseEntity.created(location).body(location);
+//    }
 
 
 }

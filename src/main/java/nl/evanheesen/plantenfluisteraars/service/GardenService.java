@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
+import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
@@ -11,15 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class GardenService {
 
     private GardenRepository gardenRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    public GardenService(GardenRepository gardenRepository) {
+    public GardenService(GardenRepository gardenRepository, EmployeeRepository employeeRepository) {
         this.gardenRepository = gardenRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public Collection<Garden> getAllGardens() {
@@ -27,12 +32,16 @@ public class GardenService {
         return gardens;
     }
 
+    public Collection<Garden> getGardensByStatus(String status) {
+        return gardenRepository.findAllByStatusIgnoreCase(status);
+    }
+
     public Collection<Garden> getGardensByEmployeeId(long employeeId) {
         return gardenRepository.findAllByEmployeeId(employeeId);
     }
 
-    public Collection<Garden> getGardensByCustomerId(long customerId) {
-        return gardenRepository.findAllByCustomerId(customerId);
+    public Collection<Garden> getGardensByCustomerId(String username) {
+        return gardenRepository.findAllByCustomerId(username);
     }
 
     public long addGarden(Garden garden) {
@@ -51,5 +60,19 @@ public class GardenService {
         return garden;
     }
 
+    public void addEmployeeToGarden(long gardenId, long id, Map<String, String> fields) {
+        Optional<Garden> optionalGarden = gardenRepository.findById(gardenId);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalGarden.isPresent() && optionalEmployee.isPresent()) {
+            Garden garden = optionalGarden.get();
+            Employee employee = optionalEmployee.get();
+            garden.setEmployee(employee);
+            garden.setStatus("Running");
+            gardenRepository.save(garden);
+        }
+        else {
+            throw new RecordNotFoundException();
+        }
+    }
 
 }
