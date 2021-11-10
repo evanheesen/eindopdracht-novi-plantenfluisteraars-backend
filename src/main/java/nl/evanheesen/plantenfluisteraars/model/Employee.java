@@ -11,6 +11,7 @@ public class Employee {
     // attributen
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false, name = "employee_id")
     public long id;
 
     @Column(length = 80)
