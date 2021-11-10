@@ -10,6 +10,6 @@ public class InvalidPasswordException extends RuntimeException {
         super(message);
     }
     public InvalidPasswordException() {
-        super("Invalid password.");
+        super("Wachtwoord is niet geldig.");
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class UserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository,PasswordEncoder passwordEncoder, ModelMapper mapper) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, PasswordEncoder passwordEncoder, ModelMapper mapper) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
@@ -76,8 +77,7 @@ public class UserService {
             user.addAuthority("ROLE_USER");
             User newUser = userRepository.save(user);
             return newUser.getUsername();
-        }
-         catch (Exception ex) {
+        } catch (Exception ex) {
             throw new BadRequestException("Kan de gebruiker niet aanmaken");
         }
     }
@@ -98,8 +98,7 @@ public class UserService {
     public void deleteUser(String username) {
         if (userRepository.existsById(username)) {
             userRepository.deleteById(username);
-        }
-        else {
+        } else {
             throw new UserNotFoundException(username);
         }
     }
@@ -108,8 +107,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException();
-        }
-        else {
+        } else {
             User user = userOptional.get();
             user.setPassword(passwordEncoder.encode(newUser.getPassword()));
             user.setEmail(newUser.getEmail());
@@ -122,8 +120,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException();
-        }
-        else {
+        } else {
             User user = userOptional.get();
             return user.getAuthorities();
         }
@@ -134,8 +131,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException();
-        }
-        else {
+        } else {
             User user = userOptional.get();
 // Toevoegen authority:
             user.addAuthority(authorityString);
@@ -147,8 +143,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(username);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException(username);
-        }
-        else {
+        } else {
             User user = userOptional.get();
             user.removeAuthority(authorityString);
             userRepository.save(user);
@@ -181,40 +176,50 @@ public class UserService {
         }
     }
 
-//    Dit toegevoegd voor DTO:
+    //    Dit toegevoegd voor DTO:
     public String createCustomerUser(CustomerRequest customerRequest) {
-        try {
-            String encryptedPassword = passwordEncoder.encode(customerRequest.getPassword());
+        var username = customerRequest.getUsername();
+        var optionalUser = userRepository.findById(username);
+        if (optionalUser.isPresent()) {
+            throw new UserNotFoundException(username);
+        } else {
+            try {
+                String encryptedPassword = passwordEncoder.encode(customerRequest.getPassword());
 
-            User user = new User();
-            user.setUsername(customerRequest.getUsername());
-            user.setPassword(encryptedPassword);
-            user.setEmail(customerRequest.getEmail());
-            user.setEnabled(true);
-            user.addAuthority("ROLE_USER");
-            User newUser = userRepository.save(user);
-            return newUser.getUsername();
-        }
-        catch (Exception ex) {
-            throw new BadRequestException("Kan de gebruiker niet aanmaken");
+                User user = new User();
+                user.setUsername(customerRequest.getUsername());
+                user.setPassword(encryptedPassword);
+                user.setEmail(customerRequest.getEmail());
+                user.setEnabled(true);
+                user.addAuthority("ROLE_USER");
+                User newUser = userRepository.save(user);
+                return newUser.getUsername();
+            } catch (Exception ex) {
+                throw new BadRequestException("Kan de gebruiker niet aanmaken");
+            }
         }
     }
 
     public String createEmployeeUser(EmployeeRequest employeeRequest) {
-        try {
-            String encryptedPassword = passwordEncoder.encode(employeeRequest.getPassword());
+        var username = employeeRequest.getUsername();
+        var optionalUser = userRepository.findById(username);
+        if (optionalUser.isPresent()) {
+            throw new UserNotFoundException(username);
+        } else {
+            try {
+                String encryptedPassword = passwordEncoder.encode(employeeRequest.getPassword());
 
-            User user = new User();
-            user.setUsername(employeeRequest.getUsername());
-            user.setPassword(encryptedPassword);
-            user.setEmail(employeeRequest.getEmail());
-            user.setEnabled(true);
-            user.addAuthority("ROLE_USER");
-            User newUser = userRepository.save(user);
-            return newUser.getUsername();
-        }
-        catch (Exception ex) {
-            throw new BadRequestException("Kan de gebruiker niet aanmaken");
+                User user = new User();
+                user.setUsername(employeeRequest.getUsername());
+                user.setPassword(encryptedPassword);
+                user.setEmail(employeeRequest.getEmail());
+                user.setEnabled(true);
+                user.addAuthority("ROLE_USER");
+                User newUser = userRepository.save(user);
+                return newUser.getUsername();
+            } catch (Exception ex) {
+                throw new BadRequestException("Kan de gebruiker niet aanmaken");
+            }
         }
     }
 

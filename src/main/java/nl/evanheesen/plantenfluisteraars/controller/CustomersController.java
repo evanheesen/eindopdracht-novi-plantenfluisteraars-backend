@@ -31,7 +31,6 @@ public class CustomersController {
 
     @GetMapping("") // get collection
     public ResponseEntity<Object> getCustomers() {
-
         return ResponseEntity.ok().body(customerServiceImpl.getCustomers());
     }
 
@@ -39,16 +38,6 @@ public class CustomersController {
     public ResponseEntity<Object> getCustomer(@PathVariable long id) {
         return ResponseEntity.ok().body(customerServiceImpl.getCustomerById(id));
     }
-
-//    @PostMapping(value = "")
-//    public ResponseEntity<Object> createCustomer(@RequestBody Customer customer) {
-//        long newId = customerServiceImpl.createCustomer(customer);
-//
-//        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/bewoners/{id}")
-//                .buildAndExpand(newId).toUri();
-//
-//        return ResponseEntity.created(location).body(location);
-//    }
 
     @PostMapping(value = "")
     public ResponseEntity<Object> newCustomerRegistration(@RequestBody CustomerRequest customerRequest) {
