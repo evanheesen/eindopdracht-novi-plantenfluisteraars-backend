@@ -42,15 +42,14 @@ public class GardensController {
         return ResponseEntity.ok().body(gardenService.getGardensByEmployeeId(id));
     }
 
-    @GetMapping("/bewoners/{username}")
-    public ResponseEntity<Object> getGardensByCustomerId(@PathVariable String username) {
-        return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(username));
+    @GetMapping("/bewoners/{id}")
+    public ResponseEntity<Object> getGardensByCustomerId(@PathVariable long id) {
+        return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(id));
     }
 
-    @PatchMapping(value = "{gardenId}/plantenfluisteraars/{id}")
-    public ResponseEntity<Object> addEmployeeToGarden(@PathVariable("gardenId") long gardenId, @PathVariable("id") long id, @RequestBody Map<String, String> fields) {
-        gardenService.addEmployeeToGarden(gardenId, id, fields);
-        return ResponseEntity.noContent().build();
+    @PutMapping(value = "/{gardenId}/plantenfluisteraars/{id}")
+    public void addEmployeeToGarden(@PathVariable("gardenId") long gardenId, @PathVariable("id") long id) {
+        gardenService.addEmployeeToGarden(gardenId, id);
     }
 
 //    @PostMapping("")

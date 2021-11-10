@@ -40,8 +40,8 @@ public class GardenService {
         return gardenRepository.findAllByEmployeeId(employeeId);
     }
 
-    public Collection<Garden> getGardensByCustomerId(String username) {
-        return gardenRepository.findAllByCustomerId(username);
+    public Collection<Garden> getGardensByCustomerId(long id) {
+        return gardenRepository.findAllByCustomerId(id);
     }
 
     public long addGarden(Garden garden) {
@@ -60,7 +60,7 @@ public class GardenService {
         return garden;
     }
 
-    public void addEmployeeToGarden(long gardenId, long id, Map<String, String> fields) {
+    public void addEmployeeToGarden(long gardenId, long id) {
         Optional<Garden> optionalGarden = gardenRepository.findById(gardenId);
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         if (optionalGarden.isPresent() && optionalEmployee.isPresent()) {

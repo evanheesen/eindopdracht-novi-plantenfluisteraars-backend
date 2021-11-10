@@ -84,6 +84,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
         employee.setFirstName(employeeRequest.getFirstName());
         employee.setLastName(employeeRequest.getLastName());
+        employee.setStreet(employeeRequest.getStreet());
+        employee.setHouseNumber(employeeRequest.getHouseNumber());
+        employee.setPostalCode(employeeRequest.getPostalCode());
+        employee.setCity(employeeRequest.getCity());
         employee.setPhone(employeeRequest.getPhone());
 //        set here the DBFile from DTO or in FileUploadService
         return employee;

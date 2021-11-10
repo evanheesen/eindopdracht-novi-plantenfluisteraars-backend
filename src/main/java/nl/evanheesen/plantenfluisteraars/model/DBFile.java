@@ -1,5 +1,6 @@
 package nl.evanheesen.plantenfluisteraars.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,9 +22,8 @@ public class DBFile {
 
     private String fileType;
 
-    public String locationURL;
-
     @Lob
+    @JsonIgnore
     private byte[] data;
 
     public DBFile() {
