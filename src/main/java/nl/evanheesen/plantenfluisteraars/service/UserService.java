@@ -1,15 +1,18 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
+import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
 import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Authority;
+import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import nl.evanheesen.plantenfluisteraars.utils.RandomStringGenerator;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -29,12 +32,16 @@ public class UserService {
     private EmployeeRepository employeeRepository;
     private CustomerRepository customerRepository;
     PasswordEncoder passwordEncoder;
+//    Dit toegevoegd voor DTO:
+    private ModelMapper mapper;
+
 
     @Autowired
-    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, ModelMapper mapper) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
+        this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -171,6 +178,12 @@ public class UserService {
         } else {
             throw new RecordNotFoundException();
         }
+    }
+
+//    Dit toegevoegd voor DTO:
+    public User convertDTOTOUser(CustomerRequest customerRequest) {
+        User user = mapper.map(customerRequest, User.class);
+        return user;
     }
 
     // Dit nog toevoegen?

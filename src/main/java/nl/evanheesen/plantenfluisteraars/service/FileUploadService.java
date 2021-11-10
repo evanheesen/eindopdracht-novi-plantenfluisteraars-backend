@@ -1,5 +1,6 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
+import nl.evanheesen.plantenfluisteraars.exception.FileNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.FileStorageException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.DBFile;
@@ -51,9 +52,10 @@ public class FileUploadService {
         }
     }
 
-//    public File getFile(String fileId) {
-//        return FileUploadRepository.findById(fileId)
-//                .orElseThrow(() -> new FileNotFoundException("Bestand niet gevonden met dit id " + fileId));
-//    }
+//    is dit nodig??
+    public DBFile getFile(String fileId) {
+        return fileUploadRepository.findById(fileId)
+                .orElseThrow(() -> new FileNotFoundException("Bestand niet gevonden met dit id " + fileId));
+    }
 
 }

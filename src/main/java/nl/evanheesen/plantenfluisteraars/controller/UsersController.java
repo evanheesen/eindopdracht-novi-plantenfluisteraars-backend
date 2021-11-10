@@ -31,7 +31,6 @@ public class UsersController {
 
     @PostMapping(value = "")
     public ResponseEntity<Object> createUser(@RequestBody UserPostRequest userPostRequest) {
-
         String newUsername = userService.createUser(userPostRequest);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")

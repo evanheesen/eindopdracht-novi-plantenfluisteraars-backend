@@ -28,7 +28,7 @@ public class EmployeesController {
     }
 
     @GetMapping("/plantenfluisteraars/{id}") // get item
-    public ResponseEntity<Object> getEmployees(@PathVariable long id) {
+    public ResponseEntity<Object> getEmployeeById(@PathVariable long id) {
         return ResponseEntity.ok().body(employeeService.getEmployeeById(id));
     }
 

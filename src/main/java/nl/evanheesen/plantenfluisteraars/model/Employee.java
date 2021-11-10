@@ -37,14 +37,12 @@ public class Employee {
     @Column(length = 15)
     public String phone;
 
-//    @OneToOne(mappedBy = "employee")
-//    User user;
-
     @OneToOne
     @JoinColumn(name = "file_id")
     private DBFile dbFile;
 
-//    @OneToMany(mappedBy = "employee")
+//    @OneToMany
+//    @JoinColumn(name = "employee_id")
 //    List<Garden> gardens;
 
     // getters and setters
@@ -127,14 +125,6 @@ public class Employee {
     public void setDBFile(DBFile dbFile) {
         this.dbFile = dbFile;
     }
-
-    //    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
 
 //    public List<Garden> getGardens() {
 //        return gardens;

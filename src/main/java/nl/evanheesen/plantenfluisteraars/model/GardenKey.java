@@ -57,6 +57,4 @@
 //        return result;
 //    }
 //
-//    // standard constructors, getters, and setters
-//    // hashcode and equals implementation
 //}

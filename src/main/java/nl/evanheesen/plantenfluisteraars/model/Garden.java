@@ -1,5 +1,7 @@
 //package nl.evanheesen.plantenfluisteraars.model;
 //
+//import com.fasterxml.jackson.annotation.JsonFormat;
+//
 //import javax.persistence.*;
 //import java.time.LocalDate;
 //
@@ -8,21 +10,29 @@
 //public class Garden {
 //
 //    // attributen
+////    @Id
+////    @EmbeddedId
+////    GardenKey id;
+//
+////    ####### aanmaken garden lukt niet.
+//
 //    @Id
-//    @EmbeddedId
-//    GardenKey id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(updatable = false, unique = true)
+//    public long id;
 //
 //    @ManyToOne
-//    @MapsId("customerId")
-//    @JoinColumn(name = "customer_id")
+////    @MapsId("customerId")
+//    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
 //    Customer customer;
 //
 //    @ManyToOne
-//    @MapsId("employeeId")
-//    @JoinColumn(name = "employees_id")
+////    @MapsId("employeeId")
+//    @JoinColumn(name = "employees_id", insertable = false, updatable = false)
 //    Employee employee;
 //
 //    @Column(length = 12)
+//    @JsonFormat(pattern="dd-MM-yyyy")
 //    public LocalDate date;
 //
 //    @Column(length = 150)
@@ -42,11 +52,20 @@
 //    public byte packagePlants;
 //
 //    // getters and setters
-//    public GardenKey getId() {
+////    public GardenKey getId() {
+////        return id;
+////    }
+////
+////    public void setId(GardenKey id) {
+////        this.id = id;
+////    }
+//
+//
+//    public long getId() {
 //        return id;
 //    }
 //
-//    public void setId(GardenKey id) {
+//    public void setId(long id) {
 //        this.id = id;
 //    }
 //

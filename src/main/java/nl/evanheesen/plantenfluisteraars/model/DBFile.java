@@ -17,6 +17,8 @@ public class DBFile {
 
     private String fileType;
 
+    public String locationURL;
+
     @Lob
     private byte[] data;
 
@@ -29,7 +31,7 @@ public class DBFile {
         this.data = data;
     }
 
-    public String getId() {
+        public String getId() {
         return id;
     }
 
@@ -51,6 +53,14 @@ public class DBFile {
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
+    }
+
+    public String getLocationURL() {
+        return locationURL;
+    }
+
+    public void setLocationURL(String locationURL) {
+        this.locationURL = locationURL;
     }
 
     public byte[] getData() {
