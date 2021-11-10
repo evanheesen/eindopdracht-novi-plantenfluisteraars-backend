@@ -96,6 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = new Customer();
         customer.setFirstName(customerRequest.getFirstName());
         customer.setLastName(customerRequest.getLastName());
+        customer.setSubmissionDate(customerRequest.getSubmissionDate());
         return customer;
     }
 

@@ -94,7 +94,7 @@ private DataSource dataSource;
 //                !! Dit nog aanpassen?
                 .antMatchers(POST,"/uploadFile").permitAll()
                 .antMatchers("/aanvragen").permitAll()
-                .antMatchers("/bewoners").hasRole("USER")
+                .antMatchers("/bewoners/**").hasRole("USER")
                 .antMatchers(POST,"/authenticate").permitAll()
                 .antMatchers(GET,"/public").permitAll()
                 .anyRequest().denyAll()

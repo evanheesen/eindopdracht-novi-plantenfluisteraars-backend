@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -22,7 +22,7 @@ public class Customer {
 
     //    Dit toegevoegd:
     @NotNull
-    private LocalDateTime submissionDate;
+    private LocalDate submissionDate;
 
     @Column(length = 80, nullable = false)
     public String firstName;

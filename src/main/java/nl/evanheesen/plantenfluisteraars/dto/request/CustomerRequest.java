@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -29,8 +28,10 @@ public class CustomerRequest {
     @NotNull
     private String lastName;
 
+
+
     @JsonIgnore
-    private final LocalDateTime submissionDate = LocalDateTime.now();
+    private final LocalDate submissionDate = LocalDate.now();
 
 //private String street;
 //private String houseNumber;

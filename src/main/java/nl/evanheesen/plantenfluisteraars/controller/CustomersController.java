@@ -50,11 +50,13 @@ public class CustomersController {
     public ResponseEntity<Object> createCustomer(@RequestBody CustomerRequest customerRequest) {
 //        convert DTO to entity
         Customer customer = customerServiceImpl.convertDTOToCustomer(customerRequest);
+        String username = userService.createCustomerUser(customerRequest);
         long newId = customerServiceImpl.createCustomer(customer);
 
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/bewoners/{id}")
                 .buildAndExpand(newId).toUri();
 
+        userService.assignCustomerToUser(username, newId);
         return ResponseEntity.created(location).body(location);
     }
 

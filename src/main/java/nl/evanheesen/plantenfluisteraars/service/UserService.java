@@ -33,15 +33,15 @@ public class UserService {
     private CustomerRepository customerRepository;
     PasswordEncoder passwordEncoder;
 //    Dit toegevoegd voor DTO:
-    private ModelMapper mapper;
+//    private ModelMapper mapper;
 
 
     @Autowired
-    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, ModelMapper mapper) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository,PasswordEncoder passwordEncoder, ModelMapper mapper) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
-        this.mapper = mapper;
+//        this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -181,10 +181,31 @@ public class UserService {
     }
 
 //    Dit toegevoegd voor DTO:
-    public User convertDTOTOUser(CustomerRequest customerRequest) {
-        User user = mapper.map(customerRequest, User.class);
-        return user;
+    public String createCustomerUser(CustomerRequest customerRequest) {
+        try {
+            String encryptedPassword = passwordEncoder.encode(customerRequest.getPassword());
+
+            User user = new User();
+            user.setUsername(customerRequest.getUsername());
+            user.setPassword(encryptedPassword);
+            user.setEmail(customerRequest.getEmail());
+            user.setEnabled(true);
+            user.addAuthority("ROLE_USER");
+            User newUser = userRepository.save(user);
+            return newUser.getUsername();
+        }
+        catch (Exception ex) {
+            throw new BadRequestException("Kan de gebruiker niet aanmaken");
+        }
     }
+
+//    User user = new User();
+//        user.setUsername(customerRequest.getUsername());
+//        user.setPassword(customerRequest.getPassword());
+//        user.setEmail(customerRequest.getEmail());
+//        user.setEnabled(true);
+//        user.addAuthority("ROLE_USER");
+//        return user;
 
     // Dit nog toevoegen?
 
