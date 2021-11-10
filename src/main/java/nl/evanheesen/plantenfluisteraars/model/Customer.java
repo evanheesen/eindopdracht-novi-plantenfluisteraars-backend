@@ -50,13 +50,13 @@ public class Customer {
 
     @Column(length = 15)
     public String phone;
-
+//
 //    @OneToOne
 //    @JoinColumn(name = "user_id", referencedColumnName = "id")
 //    private User user;
 //
-//    @OneToMany
-//    @JoinColumn(name = "customer_id")
-//    List<Garden> gardens;
+    @OneToOne
+    @JoinColumn(name = "garden_id", referencedColumnName = "garden_id")
+    private Garden garden;
 
 }

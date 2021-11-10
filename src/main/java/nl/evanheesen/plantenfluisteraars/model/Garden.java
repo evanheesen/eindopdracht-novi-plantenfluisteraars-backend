@@ -9,27 +9,23 @@ import java.time.LocalDate;
 @Table(name = "gardens")
 public class Garden {
 
-    // attributen
-//    @Id
-//    @EmbeddedId
-//    GardenKey id;
-
-//    ####### aanmaken garden lukt niet.
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true)
+    @Column(updatable = false, unique = true, name = "garden_id")
     public long id;
 
-    @ManyToOne
-//    @MapsId("customerId")
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-    Customer customer;
+    @OneToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    private Customer customer;
 
     @ManyToOne
-//    @MapsId("employeeId")
-    @JoinColumn(name = "employees_id", insertable = false, updatable = false)
+    @JoinColumn(name = "employee_id")
     Employee employee;
+
+//    @ManyToOne
+////    @MapsId("employeeId")
+//    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
+//    Employee employee;
 
     @Column(length = 12)
     @JsonFormat(pattern="dd-MM-yyyy")

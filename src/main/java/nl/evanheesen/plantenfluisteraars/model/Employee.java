@@ -42,9 +42,9 @@ public class Employee {
     @JoinColumn(name = "file_id")
     private DBFile dbFile;
 
-//    @OneToMany
-//    @JoinColumn(name = "employee_id")
-//    List<Garden> gardens;
+    @OneToMany(mappedBy = "employee")
+    @JoinColumn(name = "employee_id")
+    List<Garden> gardens;
 
     // getters and setters
     public long getId() {
