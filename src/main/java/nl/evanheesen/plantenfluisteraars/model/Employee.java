@@ -43,7 +43,7 @@ public class Employee {
     private DBFile dbFile;
 
     @OneToMany(mappedBy = "employee")
-    @JoinColumn(name = "employee_id")
+//    @JoinColumn(name = "employee_id")
     List<Garden> gardens;
 
     // getters and setters

@@ -21,11 +21,11 @@ public class Customer {
     public long id;
 
     //    Dit toegevoegd:
-    @NotNull
-    private LocalDate submissionDate;
+//    @NotNull
+//    private LocalDate submissionDate;
 
-    @Column(nullable = false)
-    private String status = "Open";
+//    @Column(nullable = false)
+//    private String status = "Open";
 
     @Column(length = 80, nullable = false)
     public String firstName;
@@ -33,17 +33,17 @@ public class Customer {
     @Column(length = 80, nullable = false)
     public String lastName;
 
-    @Column(length = 150)
-    public String street;
-
-    @Column(length = 8)
-    public String houseNumber;
-
-    @Column(length = 7)
-    public String postalCode;
-
-    @Column(length = 120)
-    public String city;
+//    @Column(length = 150)
+//    public String street;
+//
+//    @Column(length = 8)
+//    public String houseNumber;
+//
+//    @Column(length = 7)
+//    public String postalCode;
+//
+//    @Column(length = 120)
+//    public String city;
 
 //    @Column(length = 120, nullable = false, unique = true)
 //    public String email;

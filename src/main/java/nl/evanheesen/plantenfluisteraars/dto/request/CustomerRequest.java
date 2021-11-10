@@ -22,7 +22,6 @@ public class CustomerRequest {
     private String email;
     private Set<String> authorities;
 
-    private String status;
     @NotNull
     private String firstName;
     @NotNull

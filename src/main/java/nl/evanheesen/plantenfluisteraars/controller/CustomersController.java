@@ -3,7 +3,9 @@ package nl.evanheesen.plantenfluisteraars.controller;
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
+import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.service.CustomerServiceImpl;
+import nl.evanheesen.plantenfluisteraars.service.GardenService;
 import nl.evanheesen.plantenfluisteraars.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +20,13 @@ public class CustomersController {
 
     private CustomerServiceImpl customerServiceImpl;
     private UserService userService;
+    private GardenService gardenService;
 
     @Autowired
-    public CustomersController(CustomerServiceImpl customerServiceImpl, UserService userService) {
+    public CustomersController(CustomerServiceImpl customerServiceImpl, UserService userService, GardenService gardenService) {
         this.customerServiceImpl = customerServiceImpl;
         this.userService = userService;
+        this.gardenService = gardenService;
     }
 
     @GetMapping("") // get collection
@@ -47,16 +51,19 @@ public class CustomersController {
 //    }
 
     @PostMapping(value = "")
-    public ResponseEntity<Object> createCustomer(@RequestBody CustomerRequest customerRequest) {
+    public ResponseEntity<Object> newCustomerRegistration(@RequestBody CustomerRequest customerRequest) {
 //        convert DTO to entity
         Customer customer = customerServiceImpl.convertDTOToCustomer(customerRequest);
         String username = userService.createCustomerUser(customerRequest);
-        long newId = customerServiceImpl.createCustomer(customer);
+        Garden garden = gardenService.convertDTOToGarden(customerRequest);
+        long customerId = customerServiceImpl.createCustomer(customer);
+        long gardenId = gardenService.addGarden(garden);
 
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/bewoners/{id}")
-                .buildAndExpand(newId).toUri();
+                .buildAndExpand(customerId).toUri();
 
-        userService.assignCustomerToUser(username, newId);
+        userService.assignCustomerToUser(username, customerId);
+        customerServiceImpl.assignGardenToCustomer(gardenId, customerId);
         return ResponseEntity.created(location).body(location);
     }
 

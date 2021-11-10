@@ -4,6 +4,7 @@ import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
+import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
     private UserRepository userRepository;
+    private GardenRepository gardenRepository;
 //    Dit toegevoegd voor DTO:
     private ModelMapper mapper;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, ModelMapper mapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, GardenRepository gardenRepository, ModelMapper mapper) {
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
+        this.gardenRepository = gardenRepository;
         this.mapper = mapper;
     }
 
@@ -61,15 +64,6 @@ public class CustomerServiceImpl implements CustomerService {
                 case "last_name":
                     customer.setLastName((String) fields.get(field));
                     break;
-                case "street":
-                    customer.setStreet((String) fields.get(field));
-                    break;
-                case "housenumber":
-                    customer.setHouseNumber((String) fields.get(field));
-                    break;
-                case "city":
-                    customer.setCity((String) fields.get(field));
-                    break;
                 case "phone":
                     customer.setPhone((String) fields.get(field));
                     break;
@@ -89,6 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerRequest customerRequest = new CustomerRequest();
         customerRequest.setFirstName(customer.getFirstName());
         customerRequest.setLastName(customer.getLastName());
+        customerRequest.setPhone(customer.getPhone());
         return customerRequest;
     }
 
@@ -96,8 +91,23 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = new Customer();
         customer.setFirstName(customerRequest.getFirstName());
         customer.setLastName(customerRequest.getLastName());
-        customer.setSubmissionDate(customerRequest.getSubmissionDate());
+        customer.setPhone(customerRequest.getPhone());
         return customer;
+    }
+
+    public void assignGardenToCustomer(long gardenId, long customerId) {
+        var optionalGarden = gardenRepository.findById(gardenId);
+        var optionalCustomer = customerRepository.findById(customerId);
+        if (optionalGarden.isPresent() && optionalCustomer.isPresent()) {
+            var garden = optionalGarden.get();
+            var customer = optionalCustomer.get();
+            garden.setCustomer(customer);
+            customer.setGarden(garden);
+            gardenRepository.save(garden);
+            customerRepository.save(customer);
+        } else {
+            throw new RecordNotFoundException();
+        }
     }
 
 //    converters with mapper:

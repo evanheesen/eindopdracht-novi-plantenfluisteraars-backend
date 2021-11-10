@@ -1,10 +1,16 @@
 package nl.evanheesen.plantenfluisteraars.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "gardens")
 public class Garden {
@@ -14,6 +20,7 @@ public class Garden {
     @Column(updatable = false, unique = true, name = "garden_id")
     public long id;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
@@ -27,9 +34,11 @@ public class Garden {
 //    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
 //    Employee employee;
 
-    @Column(length = 12)
-    @JsonFormat(pattern="dd-MM-yyyy")
-    public LocalDate date;
+    @NotNull
+    private LocalDate submissionDate;
+
+    @Column
+    private String status = "Open";
 
     @Column(length = 150)
     public String street;
@@ -47,85 +56,4 @@ public class Garden {
     @Column(length = 1)
     public byte packagePlants;
 
-    // getters and setters
-//    public GardenKey getId() {
-//        return id;
-//    }
-//
-//    public void setId(GardenKey id) {
-//        this.id = id;
-//    }
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public byte getPackagePlants() {
-        return packagePlants;
-    }
-
-    public void setPackagePlants(byte packagePlants) {
-        this.packagePlants = packagePlants;
-    }
 }
