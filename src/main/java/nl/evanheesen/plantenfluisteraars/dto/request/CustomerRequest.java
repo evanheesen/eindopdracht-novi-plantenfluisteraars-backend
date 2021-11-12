@@ -33,6 +33,7 @@ public class CustomerRequest {
     public String postalCode;
     public String city;
     public String phone;
+    public String packagePlants;
 
     @JsonIgnore
     private final LocalDate submissionDate = LocalDate.now();

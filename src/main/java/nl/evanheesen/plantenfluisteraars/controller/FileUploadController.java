@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/plantenfluisteraars")
+@RequestMapping("/employees")
 public class FileUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
@@ -24,8 +24,8 @@ public class FileUploadController {
     @Autowired
     private FileUploadService fileUploadService;
 
-    @PostMapping("/{id}/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id") long employeeId) {
+    @PostMapping("/{id}/upload-file")
+    public UploadFileResponse uploadFile(@RequestBody MultipartFile file, @PathVariable("id") long employeeId) {
         DBFile dbFile = fileUploadService.storeFile(file);
 
         var dbFileId = dbFile.getId();
@@ -41,7 +41,7 @@ public class FileUploadController {
     }
 
 //     is dit nodig??
-    @GetMapping("/{id}/getFile/{fileId}")
+    @GetMapping("/{id}/get-file/{fileId}")
     public ResponseEntity<Resource> getFile(@PathVariable String fileId, @PathVariable("id") long employeeId) {
         // Load file from database
         DBFile dbFile = fileUploadService.getFile(fileId);
@@ -52,7 +52,7 @@ public class FileUploadController {
                 .body(new ByteArrayResource(dbFile.getData()));
     }
 
-    @DeleteMapping(value = "/{id}/getFile/{fileId}")
+    @DeleteMapping(value = "/{id}/get-file/{fileId}")
     public ResponseEntity<Object> deleteFile(@PathVariable("employeeId") long id, @PathVariable("fileId") String fileId) {
         fileUploadService.deleteFile(id, fileId);
         return ResponseEntity.noContent().build();

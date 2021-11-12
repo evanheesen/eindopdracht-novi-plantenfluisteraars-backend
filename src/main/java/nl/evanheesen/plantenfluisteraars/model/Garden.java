@@ -1,6 +1,5 @@
 package nl.evanheesen.plantenfluisteraars.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,8 +51,7 @@ public class Garden {
     @Column(length = 120)
     public String city;
 
-    // Hier nog aparte klasse van maken met one-to-many relatie?
-    @Column(length = 1)
-    public byte packagePlants;
+    @Column(length = 80)
+    public String packagePlants;
 
 }

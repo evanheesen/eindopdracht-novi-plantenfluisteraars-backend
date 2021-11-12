@@ -25,17 +25,6 @@ import static org.springframework.http.HttpMethod.*;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
-////        inMemoryAuthentication: alleen voor proefversie applicatie!! Daarna jdbcAuthentication instellen (zie EdHub)
-//    @Override
-//
-//    protected void configure(AuthenticationManagerBuilder auth)
-//            throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("user").password("{noop}password").roles("USER").and()
-//                .withUser("employee").password("{noop}password").roles("EMPLOYEE").and()
-//                .withUser("admin").password("{noop}password").roles("USER", "EMPLOYEE", "ADMIN");
-//    }
-
 private DataSource dataSource;
     private JwtRequestFilter jwtRequestFilter;
 
@@ -88,15 +77,17 @@ private DataSource dataSource;
                 .antMatchers(PATCH,"/users/{^[\\w]$}/password").authenticated()
 //                .antMatchers("/bewoners/**").hasRole("USER")
 //                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("EMPLOYEE")
-                .antMatchers("/plantenfluisteraars/**").hasRole("USER")
+                .antMatchers(POST,"/employees/**").permitAll()
+                .antMatchers(PATCH,"/employees/**").hasRole("USER")
+                .antMatchers(GET,"/employees/**").hasRole("USER")
 //                .antMatchers(GET,"/users/**").hasRole("ADMIN")
                 .antMatchers("/users/**").hasRole("USER")
 //                !! Dit nog aanpassen?
                 .antMatchers(POST,"/uploadFile").permitAll()
-                .antMatchers("/aanvragen/**").permitAll()
-                .antMatchers("/bewoners/**").hasRole("USER")
+                .antMatchers("/gardens/**").permitAll()
+                .antMatchers("/customers/**").hasRole("USER")
                 .antMatchers(POST,"/authenticate").permitAll()
-                .antMatchers(GET,"/public").permitAll()
+//                .antMatchers(GET,"/public").permitAll()
                 .anyRequest().denyAll()
 //                .anyRequest().permitAll()
                 .and()

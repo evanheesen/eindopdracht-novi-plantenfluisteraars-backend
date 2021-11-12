@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/aanvragen")
+@RequestMapping("/gardens")
 public class GardensController {
 
     private GardenService gardenService;
@@ -32,24 +32,37 @@ public class GardensController {
         return ResponseEntity.ok().body(gardenService.getAllGardens());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getGarden(@PathVariable long id) {
+        return ResponseEntity.ok().body(gardenService.getGardenById(id));
+    }
+
     @GetMapping("/status/{status}")
     ResponseEntity getGardensByStatus(@PathVariable String status) {
         return ResponseEntity.ok().body(gardenService.getGardensByStatus(status));
     }
 
-    @GetMapping("/plantenfluisteraars/{id}")
+    @GetMapping("/employees/{id}")
     public ResponseEntity<Object> getGardensByEmployeeId(@PathVariable long id) {
         return ResponseEntity.ok().body(gardenService.getGardensByEmployeeId(id));
     }
 
-    @GetMapping("/bewoners/{id}")
+    @GetMapping("/customers/{id}")
     public ResponseEntity<Object> getGardensByCustomerId(@PathVariable long id) {
         return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(id));
     }
 
-    @PutMapping(value = "/{gardenId}/plantenfluisteraars/{id}")
-    public void addEmployeeToGarden(@PathVariable("gardenId") long gardenId, @PathVariable("id") long id) {
-        gardenService.addEmployeeToGarden(gardenId, id);
+    @PutMapping(value = "/{id}/employees/{employeeId}")
+    public void addEmployeeToGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId) {
+        gardenService.addEmployeeToGarden(id, employeeId);
+    }
+
+
+// 405 melding bij aanpassen status: method not allowed
+    @PatchMapping(value = "/garden/{id}/employees/{employeeId}")
+    public ResponseEntity<Object> updateGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
+        gardenService.updateGarden(id, employeeId, fields);
+        return ResponseEntity.noContent().build();
     }
 
 //    @PostMapping("")

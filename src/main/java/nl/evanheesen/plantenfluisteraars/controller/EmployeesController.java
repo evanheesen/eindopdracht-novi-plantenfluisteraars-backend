@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/plantenfluisteraars")
+@RequestMapping(value = "/employees")
 public class EmployeesController {
 
     private EmployeeService employeeService;
@@ -44,7 +44,7 @@ public class EmployeesController {
         String username = userService.createEmployeeUser(employeeRequest);
         long employeeId = employeeService.createEmployee(employee);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/plantenfluisteraars/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(employeeId).toUri();
 
         userService.assignEmployeeToUser(username, employeeId);

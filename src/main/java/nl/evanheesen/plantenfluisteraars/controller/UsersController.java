@@ -74,12 +74,12 @@ public class UsersController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{username}/plantenfluisteraars/{id}")
+    @PutMapping("/{username}/employees/{id}")
     public void assignEmployeeToUser(@PathVariable("id") long employeeId, @PathVariable("username") String username) {
         userService.assignEmployeeToUser(username, employeeId);
     }
 
-    @PutMapping("/{username}/bewoners/{id}")
+    @PutMapping("/{username}/customers/{id}")
     public void assignCustomerToUser(@PathVariable("id") long customerId, @PathVariable("username") String username) {
         userService.assignCustomerToUser(username, customerId);
     }

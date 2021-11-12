@@ -6,7 +6,6 @@ import nl.evanheesen.plantenfluisteraars.model.DBFile;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -33,6 +32,6 @@ public class EmployeeRequest {
     public String postalCode;
     public String city;
     public String phone;
-    private DBFile dbFile;
+//    private DBFile dbFile;
 
 }

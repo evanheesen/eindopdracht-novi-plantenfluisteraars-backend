@@ -32,6 +32,12 @@ public class GardenService {
         return gardens;
     }
 
+    public Optional<Garden> getGardenById(long id) {
+        if (!gardenRepository.existsById(id))
+            throw new RecordNotFoundException("Geveltuintje met id " + id + " niet gevonden.");
+        return gardenRepository.findById(id);
+    }
+
     public Collection<Garden> getGardensByStatus(String status) {
         return gardenRepository.findAllByStatusIgnoreCase(status);
     }
@@ -57,22 +63,48 @@ public class GardenService {
         garden.setHouseNumber(customerRequest.getHouseNumber());
         garden.setPostalCode(customerRequest.getPostalCode());
         garden.setCity(customerRequest.getCity());
+        garden.setPackagePlants(customerRequest.getPackagePlants());
         return garden;
     }
 
-    public void addEmployeeToGarden(long gardenId, long id) {
-        Optional<Garden> optionalGarden = gardenRepository.findById(gardenId);
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+    public void addEmployeeToGarden(long id, long employeeId) {
+        Optional<Garden> optionalGarden = gardenRepository.findById(id);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalGarden.isPresent() && optionalEmployee.isPresent()) {
             Garden garden = optionalGarden.get();
             Employee employee = optionalEmployee.get();
             garden.setEmployee(employee);
-            garden.setStatus("Running");
+            garden.setStatus("Actief");
             gardenRepository.save(garden);
         }
         else {
             throw new RecordNotFoundException();
         }
     }
+
+    public void updateGarden(long id, long employeeId, Map<String, String> fields) {
+        if (!gardenRepository.existsById(id)) {
+            throw new RecordNotFoundException("Geveltuin kan niet gevonden worden");
+        }
+        Garden garden = gardenRepository.findById(id).get();
+        for (String field : fields.keySet()) {
+            switch (field.toLowerCase()) {
+                case "status":
+                    garden.setStatus((String) fields.get(field));
+                    if(fields.get(field).equals("Actief")) {
+                        addEmployeeToGarden(id, employeeId);
+                    }
+                    break;
+                case "house_number":
+                    garden.setHouseNumber((String) fields.get(field));
+                    break;
+                case "package_plants":
+                    garden.setPackagePlants((String) fields.get(field));
+                    break;
+            }
+        }
+        gardenRepository.save(garden);
+    }
+
 
 }

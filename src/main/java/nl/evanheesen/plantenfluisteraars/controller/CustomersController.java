@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/bewoners")
+@RequestMapping(value = "/customers")
 public class CustomersController {
 
     private CustomerServiceImpl customerServiceImpl;

@@ -16,6 +16,7 @@ public class GlobalCorsConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("*")
+//                        hieronder "Options" toevoegen bij problemen GET method frontend, maar niet in Postman
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE");
             }
         };
