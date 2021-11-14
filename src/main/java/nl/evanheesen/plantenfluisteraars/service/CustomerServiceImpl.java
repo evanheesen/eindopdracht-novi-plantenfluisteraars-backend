@@ -46,11 +46,6 @@ public class CustomerServiceImpl implements CustomerService {
         return newCustomer.getId();
     }
 
-//    public Customer createCustomer(Customer customer) {
-//        Customer newCustomer = customerRepository.save(customer);
-//        return newCustomer;
-//    }
-
     public void partialUpdateCustomer(long id, Map<String, String> fields) {
         if (!customerRepository.existsById(id)) {
             throw new RecordNotFoundException();
@@ -73,12 +68,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(long id) {
-        if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
-        customerRepository.deleteById(id);
-    }
+//    public void deleteCustomer(long id) {
+//        if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
+//        customerRepository.deleteById(id);
+//    }
 
-//    Dit toegevoegd voor DTO:
     public CustomerRequest convertCustomerToDTO(Customer customer) {
         CustomerRequest customerRequest = new CustomerRequest();
         customerRequest.setFirstName(customer.getFirstName());
@@ -109,16 +103,5 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RecordNotFoundException();
         }
     }
-
-//    converters with mapper:
-
-//    public CustomerRequest convertCustomerToDTO(Customer customer) {
-//        CustomerRequest customerRequest = mapper.map(customer, CustomerRequest.class);
-//        return customerRequest;
-
-//    public Customer convertDTOTOCustomer(CustomerRequest customerRequest) {
-//        Customer customer = mapper.map(customerRequest, Customer.class);
-//        return customer;
-//    }
 
 }

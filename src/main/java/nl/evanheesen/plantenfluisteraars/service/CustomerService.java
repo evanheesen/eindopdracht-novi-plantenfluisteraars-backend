@@ -15,14 +15,13 @@ public interface CustomerService {
 
     public long createCustomer(Customer customer);
 
-//    Dit toegevoegd voor DTO
-//    public Customer createCustomer(Customer customer);
-
     public void partialUpdateCustomer(long id, Map<String, String> fields);
 
-    public void deleteCustomer(long id);
+//    public void deleteCustomer(long id);
 
-    //    Dit toegevoegd voor DTO
+    public void assignGardenToCustomer(long gardenId, long customerId);
+
+//    //    Dit toegevoegd voor DTO
     public CustomerRequest convertCustomerToDTO(Customer customer);
 
     public Customer convertDTOToCustomer(CustomerRequest customerRequest);
