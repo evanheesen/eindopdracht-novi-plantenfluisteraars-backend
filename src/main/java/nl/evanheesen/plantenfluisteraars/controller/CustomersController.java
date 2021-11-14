@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3001", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomersController {

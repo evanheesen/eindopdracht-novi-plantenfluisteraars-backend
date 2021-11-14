@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3001", maxAge = 3600)
 @RestController
 @RequestMapping("/gardens")
 public class GardensController {
@@ -33,22 +34,22 @@ public class GardensController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getGarden(@PathVariable long id) {
+    public ResponseEntity<Object> getGarden(@PathVariable("id") long id) {
         return ResponseEntity.ok().body(gardenService.getGardenById(id));
     }
 
     @GetMapping("/status/{status}")
-    ResponseEntity getGardensByStatus(@PathVariable String status) {
+    ResponseEntity getGardensByStatus(@PathVariable("status") String status) {
         return ResponseEntity.ok().body(gardenService.getGardensByStatus(status));
     }
 
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Object> getGardensByEmployeeId(@PathVariable long id) {
+    public ResponseEntity<Object> getGardensByEmployeeId(@PathVariable("id") long id) {
         return ResponseEntity.ok().body(gardenService.getGardensByEmployeeId(id));
     }
 
     @GetMapping("/customers/{id}")
-    public ResponseEntity<Object> getGardensByCustomerId(@PathVariable long id) {
+    public ResponseEntity<Object> getGardensByCustomerId(@PathVariable("id") long id) {
         return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(id));
     }
 

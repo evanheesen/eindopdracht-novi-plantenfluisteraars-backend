@@ -37,7 +37,6 @@ private DataSource dataSource;
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-// Nog data sql bestand vullen met juiste user gegevens en authorities!!
         auth.jdbcAuthentication().dataSource(dataSource)
                 // Dit niet noodzakelijk, maar is om meer duidelijkheid te verschaffen:
                 .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username=?")
@@ -63,9 +62,6 @@ private DataSource dataSource;
         return super.userDetailsServiceBean();
     }
 
-
-
-    // Authentication: endpoints en roles nog aanpassen!!
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -74,25 +70,17 @@ private DataSource dataSource;
                 .and()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers(POST,"/authenticate").permitAll()
                 .antMatchers(PATCH,"/users/{^[\\w]$}/password").authenticated()
-//                .antMatchers("/bewoners/**").hasRole("USER")
-//                .antMatchers(GET,"/plantenfluisteraars/**").hasRole("EMPLOYEE")
-                .antMatchers(POST,"/employees/**").permitAll()
-//                .antMatchers(PATCH,"/employees/**").hasRole("USER")
-//                .antMatchers(GET,"/employees/").hasRole("ADMIN")
-                .antMatchers(GET,"/employees/**").hasRole("ADMIN")
-//                .antMatchers("/employees/**").permitAll()
-//                .antMatchers(GET,"/users/**").hasRole("ADMIN")
                 .antMatchers("/users/**").hasRole("USER")
-//                !! Dit nog aanpassen?
-                .antMatchers(POST,"/files/**").permitAll()
-                .antMatchers("/gardens/**").hasRole("USER")
                 .antMatchers(POST,"/customers").permitAll()
                 .antMatchers("/customers/**").hasRole("USER")
-                .antMatchers(POST,"/authenticate").permitAll()
-//                .antMatchers(GET,"/public").permitAll()
+                .antMatchers(GET,"/employees/**").hasRole("USER")
+                .antMatchers(POST,"/employees/**").permitAll()
+                .antMatchers("/gardens/**").hasRole("USER")
+                .antMatchers(POST,"/files/**").permitAll()
+                .antMatchers(GET,"/files/**").hasRole("USER")
                 .anyRequest().denyAll()
-//                .anyRequest().permitAll()
                 .and()
                 .cors()
                 .and()
