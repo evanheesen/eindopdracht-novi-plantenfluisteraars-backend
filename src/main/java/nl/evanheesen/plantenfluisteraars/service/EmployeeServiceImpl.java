@@ -31,6 +31,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees;
     }
 
+    public Iterable<Employee> getEmployeesByStatus(String status) {
+        Iterable<Employee> employees = employeeRepository.findAllByStatusIgnoreCase(status);
+        return employees;
+    }
+
     public Optional<Employee> getEmployeeById(long id) {
         if (!employeeRepository.existsById(id))
             throw new RecordNotFoundException("Plantenfluisteraar met id " + id + " niet gevonden.");
@@ -89,6 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPostalCode(employeeRequest.getPostalCode());
         employee.setCity(employeeRequest.getCity());
         employee.setPhone(employeeRequest.getPhone());
+        employee.setStatus("Inactief");
 //        set here the DBFile from DTO or in FileUploadService
         return employee;
     }

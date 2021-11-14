@@ -57,8 +57,6 @@ public class GardensController {
         gardenService.addEmployeeToGarden(id, employeeId);
     }
 
-
-// 405 melding bij aanpassen status: method not allowed
     @PatchMapping(value = "/garden/{id}/employees/{employeeId}")
     public ResponseEntity<Object> updateGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
         gardenService.updateGarden(id, employeeId, fields);

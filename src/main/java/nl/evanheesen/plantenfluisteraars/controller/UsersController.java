@@ -84,10 +84,5 @@ public class UsersController {
         userService.assignCustomerToUser(username, customerId);
     }
 
-//    @PatchMapping(value = "/{username}/password")
-//    public ResponseEntity<Object> setPassword(@PathVariable("username") String username, @RequestBody String password) {
-//        userService.setPassword(username, password);
-//        return ResponseEntity.noContent().build();
-//    }
 
 }

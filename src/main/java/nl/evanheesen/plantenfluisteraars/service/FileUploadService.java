@@ -53,19 +53,18 @@ public class FileUploadService {
         }
     }
 
-//    is dit nodig??
     public DBFile getFile(String fileId) {
         return fileUploadRepository.findById(fileId)
                 .orElseThrow(() -> new FileNotFoundException("Bestand niet gevonden met dit id " + fileId));
     }
 
-    public void deleteFile(long id, String fileId) {
-        if (employeeRepository.existsById(id) && fileUploadRepository.existsById(fileId)) {
-            fileUploadRepository.deleteById(fileId);
-        }
-        else {
-            throw new FileNotFoundException(fileId);
-        }
-    }
+//    public void deleteFile(long id, String fileId) {
+//        if (employeeRepository.existsById(id) && fileUploadRepository.existsById(fileId)) {
+//            fileUploadRepository.deleteById(fileId);
+//        }
+//        else {
+//            throw new FileNotFoundException(fileId);
+//        }
+//    }
 
 }

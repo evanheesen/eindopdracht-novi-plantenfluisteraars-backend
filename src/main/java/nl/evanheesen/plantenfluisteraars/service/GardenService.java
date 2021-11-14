@@ -1,6 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
+import nl.evanheesen.plantenfluisteraars.exception.NotAuthorizedException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
@@ -75,9 +76,24 @@ public class GardenService {
             Employee employee = optionalEmployee.get();
             garden.setEmployee(employee);
             garden.setStatus("Actief");
+            employee.setStatus("Actief");
             gardenRepository.save(garden);
+        } else {
+            throw new RecordNotFoundException();
         }
-        else {
+    }
+
+    public void deleteEmployeeFromGarden(long id, long employeeId, String valueStatus) {
+        Optional<Garden> optionalGarden = gardenRepository.findById(id);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalGarden.isPresent() && optionalEmployee.isPresent()) {
+            Garden garden = optionalGarden.get();
+            Employee employee = optionalEmployee.get();
+            garden.setEmployee(null);
+            garden.setStatus(valueStatus);
+            employee.setStatus("Inactief");
+            gardenRepository.save(garden);
+        } else {
             throw new RecordNotFoundException();
         }
     }
@@ -90,9 +106,13 @@ public class GardenService {
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "status":
-                    garden.setStatus((String) fields.get(field));
-                    if(fields.get(field).equals("Actief")) {
+                    if (garden.getStatus().equals("Open") && fields.containsValue("Actief")) {
                         addEmployeeToGarden(id, employeeId);
+                    } else if (garden.getStatus().equals("Actief") && fields.containsValue("Afgerond")) {
+                        String valueStatus = fields.get(field);
+                        deleteEmployeeFromGarden(id, employeeId, valueStatus);
+                    } else {
+                        throw new NotAuthorizedException("Deze statuswijziging is niet mogelijk");
                     }
                     break;
                 case "house_number":

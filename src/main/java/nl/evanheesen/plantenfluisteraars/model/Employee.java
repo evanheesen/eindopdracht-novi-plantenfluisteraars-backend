@@ -38,6 +38,9 @@ public class Employee {
     @Column(length = 120)
     public String city;
 
+    @Column(length = 10)
+    public String status;
+
 //    @Column(length = 120, nullable = false, unique = true)
 //    public String email;
 

@@ -27,12 +27,17 @@ public class EmployeesController {
         this.userService = userService;
     }
 
-    @GetMapping("") // get collection
+    @GetMapping("")
     public ResponseEntity<Object> getEmployees() {
         return ResponseEntity.ok().body(employeeService.getEmployees());
     }
 
-    @GetMapping("/{id}") // get item
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Object> getEmployeesByStatus(@PathVariable String status) {
+        return ResponseEntity.ok().body(employeeService.getEmployeesByStatus(status));
+    }
+
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getEmployeeById(@PathVariable long id) {
         return ResponseEntity.ok().body(employeeService.getEmployeeById(id));
     }

@@ -12,6 +12,8 @@ public interface EmployeeService {
 
     public Optional<Employee> getEmployeeById(long id);
 
+    public Iterable<Employee> getEmployeesByStatus(String status);
+
     public long createEmployee(Employee employee);
 
     public void partialUpdateEmployee(long id, Map<String, String> fields);
