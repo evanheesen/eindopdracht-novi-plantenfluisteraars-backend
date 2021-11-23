@@ -78,6 +78,7 @@ private DataSource dataSource;
                 .antMatchers(GET,"/employees/**").hasRole("USER")
                 .antMatchers(POST,"/employees/**").permitAll()
                 .antMatchers("/gardens/**").hasRole("USER")
+                .antMatchers(PATCH,"/gardens/admin/**").hasRole("ADMIN")
                 .antMatchers(POST,"/files/**").permitAll()
                 .antMatchers(GET,"/files/**").hasRole("USER")
                 .anyRequest().denyAll()

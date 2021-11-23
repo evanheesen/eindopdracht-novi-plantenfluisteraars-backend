@@ -10,6 +10,7 @@ import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -91,7 +92,9 @@ public class GardenService {
             Employee employee = optionalEmployee.get();
             garden.setEmployee(null);
             garden.setStatus(valueStatus);
-            employee.setStatus("Inactief");
+            if (employee.getGardens().size() == 0) {
+                employee.setStatus("Inactief");
+            }
             gardenRepository.save(garden);
         } else {
             throw new RecordNotFoundException();
@@ -115,10 +118,19 @@ public class GardenService {
                         throw new NotAuthorizedException("Deze statuswijziging is niet mogelijk");
                     }
                     break;
-                case "house_number":
+                case "street":
+                    garden.setStreet((String) fields.get(field));
+                    break;
+                case "houseNumber":
                     garden.setHouseNumber((String) fields.get(field));
                     break;
-                case "package_plants":
+                case "postalCode":
+                    garden.setPostalCode((String) fields.get(field));
+                    break;
+                case "city":
+                    garden.setCity((String) fields.get(field));
+                    break;
+                case "packagePlants":
                     garden.setPackagePlants((String) fields.get(field));
                     break;
             }
@@ -126,5 +138,37 @@ public class GardenService {
         gardenRepository.save(garden);
     }
 
-
+    public void editGardenByAdmin(long id, Map<String, String> fields) {
+        if (!gardenRepository.existsById(id)) {
+            throw new RecordNotFoundException();
+        }
+        Garden garden = gardenRepository.findById(id).get();
+        for (String field : fields.keySet()) {
+            switch (field.toLowerCase()) {
+                case "street":
+                    garden.setStreet((String) fields.get(field));
+                    break;
+                case "houseNumber":
+                    garden.setHouseNumber((String) fields.get(field));
+                    break;
+                case "postalCode":
+                    garden.setPostalCode((String) fields.get(field));
+                    break;
+                case "city":
+                    garden.setCity((String) fields.get(field));
+                    break;
+                case "packagePlants":
+                    garden.setPackagePlants((String) fields.get(field));
+                    break;
+                case "status":
+                    String newStatus = fields.get(field);
+                    long employeeId = garden.getEmployee().getId();
+                    if ((newStatus.equals("Open") || newStatus.equals("Afgerond")) && garden.getStatus().equals("Actief")) {
+                        deleteEmployeeFromGarden(id, employeeId, newStatus);
+                    }
+                    break;
+            }
+        }
+        gardenRepository.save(garden);
+    }
 }

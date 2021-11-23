@@ -64,6 +64,12 @@ public class GardensController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping(value = "/admin/{id}")
+    public ResponseEntity<Object> editGarden(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
+    gardenService.editGardenByAdmin(id, fields);
+    return ResponseEntity.noContent().build();
+    }
+
 //    @PostMapping("")
 //    public ResponseEntity<Object> addGarden(@RequestBody Garden garden) {
 //        long newId = gardenService.addGarden(garden);
