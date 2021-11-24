@@ -52,8 +52,7 @@ public class Employee {
     private DBFile dbFile;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employee")
-//    @JoinColumn(name = "employee_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
     List<Garden> gardens;
 
 }

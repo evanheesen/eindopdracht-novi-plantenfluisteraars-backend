@@ -20,13 +20,13 @@ public class Garden {
     public long id;
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    @OneToOne(mappedBy = "customer")
+//    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    Employee employee;
+    private Employee employee;
 
 //    @ManyToOne
 ////    @MapsId("employeeId")

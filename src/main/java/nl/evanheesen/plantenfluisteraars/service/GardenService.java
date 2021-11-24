@@ -148,25 +148,34 @@ public class GardenService {
                 case "street":
                     garden.setStreet((String) fields.get(field));
                     break;
-                case "houseNumber":
+                case "housenumber":
                     garden.setHouseNumber((String) fields.get(field));
                     break;
-                case "postalCode":
+                case "postalcode":
                     garden.setPostalCode((String) fields.get(field));
                     break;
                 case "city":
                     garden.setCity((String) fields.get(field));
                     break;
-                case "packagePlants":
-                    garden.setPackagePlants((String) fields.get(field));
+                case "packageplants":
+                    String newPackage = fields.get(field);
+                    String currentPackage = garden.getPackagePlants();
+                    if (!newPackage.equals(currentPackage)) {
+                        garden.setPackagePlants(newPackage);
+                    }
                     break;
                 case "status":
                     String newStatus = fields.get(field);
-                    long employeeId = garden.getEmployee().getId();
-                    if ((newStatus.equals("Open") || newStatus.equals("Afgerond")) && garden.getStatus().equals("Actief")) {
-                        deleteEmployeeFromGarden(id, employeeId, newStatus);
+                    String currentStatus = garden.getStatus();
+                    if (!newStatus.equals(currentStatus)) {
+                        long employeeId = garden.getEmployee().getId();
+                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond")) && garden.getStatus().equals("Actief")) {
+                            deleteEmployeeFromGarden(id, employeeId, newStatus);
+                        }
                     }
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + field.toLowerCase());
             }
         }
         gardenRepository.save(garden);
