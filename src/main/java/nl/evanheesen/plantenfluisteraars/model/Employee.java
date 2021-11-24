@@ -41,9 +41,6 @@ public class Employee {
     @Column(length = 10)
     public String status;
 
-//    @Column(length = 120, nullable = false, unique = true)
-//    public String email;
-
     @Column(length = 15)
     public String phone;
 
@@ -53,6 +50,7 @@ public class Employee {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+//    @OneToMany(mappedBy = "employee")
     List<Garden> gardens;
 
 }

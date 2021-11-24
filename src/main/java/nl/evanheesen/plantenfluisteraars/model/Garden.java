@@ -20,18 +20,14 @@ public class Garden {
     public long id;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "customer")
-//    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+//    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
-//    @ManyToOne
-////    @MapsId("employeeId")
-//    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
-//    Employee employee;
 
     @NotNull
     private LocalDate submissionDate;

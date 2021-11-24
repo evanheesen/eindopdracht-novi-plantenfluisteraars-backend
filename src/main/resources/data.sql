@@ -1,7 +1,12 @@
-INSERT INTO customers (customer_id, first_name, last_name, phone, garden_id)
+--INSERT INTO customers (customer_id, first_name, last_name, phone, garden_id)
+--VALUES
+--(1000, 'Karin', 'Bloemen', '0677881122', (SELECT garden_id from gardens WHERE garden_id=3000)),
+--(1001, 'Pascal', 'Struijk', '0644556677', (SELECT garden_id from gardens WHERE garden_id=3001));
+
+INSERT INTO customers (customer_id, first_name, last_name, phone)
 VALUES
-(1000, 'Karin', 'Bloemen', '0677881122', (SELECT garden_id from gardens WHERE garden_id=3000)),
-(1001, 'Pascal', 'Struijk', '0644556677', (SELECT garden_id from gardens WHERE garden_id=3001));
+(1000, 'Karin', 'Bloemen', '0677881122'),
+(1001, 'Pascal', 'Struijk', '0644556677');
 
 INSERT INTO employees (employee_id, first_name, last_name, street, house_number, postal_code, city, phone, status)
 VALUES
