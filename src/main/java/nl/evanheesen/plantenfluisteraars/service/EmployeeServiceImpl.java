@@ -54,10 +54,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).get();
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
-                case "first_name":
+                case "firstname":
                     employee.setFirstName((String) fields.get(field));
                     break;
-                case "last_name":
+                case "lastname":
                     employee.setLastName((String) fields.get(field));
                     break;
                 case "street":
@@ -65,6 +65,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                     break;
                 case "housenumber":
                     employee.setHouseNumber((String) fields.get(field));
+                    break;
+                case "postalcode":
+                    employee.setPostalCode((String) fields.get(field));
                     break;
                 case "city":
                     employee.setCity((String) fields.get(field));

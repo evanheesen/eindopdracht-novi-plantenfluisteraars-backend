@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GardenService {
@@ -72,6 +70,7 @@ public class GardenService {
     public void addEmployeeToGarden(long id, long employeeId) {
         Optional<Garden> optionalGarden = gardenRepository.findById(id);
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+
         if (optionalGarden.isPresent() && optionalEmployee.isPresent()) {
             Garden garden = optionalGarden.get();
             Employee employee = optionalEmployee.get();
@@ -90,9 +89,10 @@ public class GardenService {
         if (optionalGarden.isPresent() && optionalEmployee.isPresent()) {
             Garden garden = optionalGarden.get();
             Employee employee = optionalEmployee.get();
+            int gardensEmployee = getGardensByEmployeeId(employeeId).size();
             garden.setEmployee(null);
             garden.setStatus(valueStatus);
-            if (employee.getGardens().size() == 0) {
+            if (gardensEmployee == 1) {
                 employee.setStatus("Inactief");
             }
             gardenRepository.save(garden);
@@ -169,8 +169,10 @@ public class GardenService {
                     String currentStatus = garden.getStatus();
                     if (!newStatus.equals(currentStatus)) {
                         long employeeId = garden.getEmployee().getId();
-                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond")) && garden.getStatus().equals("Actief")) {
+                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond") || newStatus.equals("Inactief")) && garden.getStatus().equals("Actief")) {
                             deleteEmployeeFromGarden(id, employeeId, newStatus);
+                        } else {
+                            garden.setStatus(newStatus);
                         }
                     }
                     break;
