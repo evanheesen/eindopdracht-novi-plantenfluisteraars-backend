@@ -145,6 +145,12 @@ public class GardenService {
         Garden garden = gardenRepository.findById(id).get();
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
+                case "firstname":
+                    garden.getCustomer().setFirstName((String) fields.get(field));
+                    break;
+                case "lastname":
+                    garden.getCustomer().setLastName((String) fields.get(field));
+                    break;
                 case "street":
                     garden.setStreet((String) fields.get(field));
                     break;

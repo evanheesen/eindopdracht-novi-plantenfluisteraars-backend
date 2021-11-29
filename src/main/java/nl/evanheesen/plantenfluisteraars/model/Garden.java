@@ -19,13 +19,12 @@ public class Garden {
     @Column(updatable = false, unique = true, name = "garden_id")
     public long id;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-//    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 

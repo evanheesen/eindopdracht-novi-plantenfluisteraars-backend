@@ -50,7 +50,6 @@ public class Employee {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
-//    @OneToMany(mappedBy = "employee")
     List<Garden> gardens;
 
 }

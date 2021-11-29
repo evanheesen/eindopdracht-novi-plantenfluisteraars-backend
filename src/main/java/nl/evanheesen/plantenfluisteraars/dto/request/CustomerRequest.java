@@ -38,9 +38,4 @@ public class CustomerRequest {
     @JsonIgnore
     private final LocalDate submissionDate = LocalDate.now();
 
-//private String street;
-//private String houseNumber;
-//private String postalCode;
-//private String phone;
-
 }
