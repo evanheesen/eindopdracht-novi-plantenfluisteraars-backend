@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.controller;
 import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.User;
+import nl.evanheesen.plantenfluisteraars.service.CustomerService;
 import nl.evanheesen.plantenfluisteraars.service.EmployeeService;
 import nl.evanheesen.plantenfluisteraars.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

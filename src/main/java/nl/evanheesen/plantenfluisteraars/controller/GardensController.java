@@ -70,6 +70,12 @@ public class GardensController {
     return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<Object> deleteGarden(@PathVariable("id") long id) {
+        gardenService.deleteGarden(id);
+        return ResponseEntity.noContent().build();
+    }
+
 //    @PostMapping("")
 //    public ResponseEntity<Object> addGarden(@RequestBody Garden garden) {
 //        long newId = gardenService.addGarden(garden);

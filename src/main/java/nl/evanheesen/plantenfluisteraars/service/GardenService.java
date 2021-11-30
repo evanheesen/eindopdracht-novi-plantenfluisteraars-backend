@@ -20,11 +20,14 @@ public class GardenService {
 
     private GardenRepository gardenRepository;
     private EmployeeRepository employeeRepository;
+    private CustomerService customerService;
+//    private CustomerRepository customerRepository;
 
     @Autowired
-    public GardenService(GardenRepository gardenRepository, EmployeeRepository employeeRepository) {
+    public GardenService(GardenRepository gardenRepository, EmployeeRepository employeeRepository, CustomerService customerService) {
         this.gardenRepository = gardenRepository;
         this.employeeRepository = employeeRepository;
+        this.customerService = customerService;
     }
 
     public Collection<Garden> getAllGardens() {
@@ -188,4 +191,18 @@ public class GardenService {
         }
         gardenRepository.save(garden);
     }
+
+    public void deleteGarden(long id) {
+        if (!gardenRepository.existsById(id)) {
+            throw new RecordNotFoundException();
+        }
+        Garden garden = gardenRepository.findById(id).get();
+        long employeeId = garden.getEmployee().getId();
+        long customerId = garden.getCustomer().getId();
+        String employeeStatus = garden.getEmployee().getStatus();
+        deleteEmployeeFromGarden(id, employeeId, employeeStatus);
+        customerService.deleteCustomer(customerId);
+        gardenRepository.deleteById(id);
+    }
+
 }

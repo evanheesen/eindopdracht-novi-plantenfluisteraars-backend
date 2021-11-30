@@ -68,10 +68,10 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customer);
     }
 
-//    public void deleteCustomer(long id) {
-//        if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
-//        customerRepository.deleteById(id);
-//    }
+    public void deleteCustomer(long id) {
+        if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
+        customerRepository.deleteById(id);
+    }
 
     public CustomerRequest convertCustomerToDTO(Customer customer) {
         CustomerRequest customerRequest = new CustomerRequest();

@@ -11,4 +11,5 @@ public interface GardenRepository extends JpaRepository<Garden, Long> {
     Collection<Garden> findAllByEmployeeId(long employeeId);
     Collection<Garden> findAllByCustomerId(long id);
     Collection<Garden> findAllByStatusIgnoreCase(String status);
+
 }
