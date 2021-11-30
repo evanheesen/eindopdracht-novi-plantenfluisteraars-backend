@@ -20,14 +20,11 @@ public class GardenService {
 
     private GardenRepository gardenRepository;
     private EmployeeRepository employeeRepository;
-    private CustomerService customerService;
-//    private CustomerRepository customerRepository;
 
     @Autowired
-    public GardenService(GardenRepository gardenRepository, EmployeeRepository employeeRepository, CustomerService customerService) {
+    public GardenService(GardenRepository gardenRepository, EmployeeRepository employeeRepository) {
         this.gardenRepository = gardenRepository;
         this.employeeRepository = employeeRepository;
-        this.customerService = customerService;
     }
 
     public Collection<Garden> getAllGardens() {
@@ -198,10 +195,8 @@ public class GardenService {
         }
         Garden garden = gardenRepository.findById(id).get();
         long employeeId = garden.getEmployee().getId();
-        long customerId = garden.getCustomer().getId();
         String employeeStatus = garden.getEmployee().getStatus();
         deleteEmployeeFromGarden(id, employeeId, employeeStatus);
-        customerService.deleteCustomer(customerId);
         gardenRepository.deleteById(id);
     }
 

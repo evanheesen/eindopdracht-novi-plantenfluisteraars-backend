@@ -17,7 +17,7 @@ public interface CustomerService {
 
     public void partialUpdateCustomer(long id, Map<String, String> fields);
 
-    public void deleteCustomer(long id);
+//    public void deleteCustomer(long id);
 
     public void assignGardenToCustomer(long gardenId, long customerId);
 
