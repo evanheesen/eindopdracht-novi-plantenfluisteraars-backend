@@ -59,8 +59,8 @@ public class EmployeesController {
     }
 
     @PatchMapping(value = "/edit/{id}")
-    public ResponseEntity<Object> updateEmployeePartial(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
-        employeeService.partialUpdateEmployee(id, fields);
+    public ResponseEntity<Object> editEmployee(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
+        employeeService.editEmployee(id, fields);
         return ResponseEntity.noContent().build();
     }
 

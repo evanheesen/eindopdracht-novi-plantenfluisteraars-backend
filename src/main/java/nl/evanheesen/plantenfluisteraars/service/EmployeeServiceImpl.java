@@ -5,11 +5,14 @@ import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
+import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
+import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,11 +22,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
     private UserRepository userRepository;
+    private GardenRepository gardenRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, UserRepository userRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, UserRepository userRepository, GardenRepository gardenRepository) {
         this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
+        this.gardenRepository = gardenRepository;
     }
 
     public Iterable<Employee> getEmployees() {
@@ -47,7 +52,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return newEmployee.getId();
     }
 
-    public void partialUpdateEmployee(long id, Map<String, String> fields) {
+    public void removeEmployeeFromGardens(long id) {
+        Collection<Garden> gardens = gardenRepository.findAllByEmployeeId(id);
+        gardens.forEach(garden -> garden.setEmployee(null));
+        gardens.forEach(garden -> garden.setStatus("Open"));
+        gardens.forEach(garden -> gardenRepository.save(garden));
+    }
+
+    public void editEmployee(long id, Map<String, String> fields) {
         if (!employeeRepository.existsById(id)) {
             throw new RecordNotFoundException();
         }
@@ -75,7 +87,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                 case "phone":
                     employee.setPhone((String) fields.get(field));
                     break;
-
+                case "status":
+                    String newStatus = fields.get(field);
+                    String currentStatus = employee.getStatus();
+                    if (!newStatus.equals(currentStatus) && newStatus.equals("Inactief")) {
+                        employee.setStatus("Inactief");
+                        removeEmployeeFromGardens(id);
+                    }
+                    break;
             }
         }
         employeeRepository.save(employee);

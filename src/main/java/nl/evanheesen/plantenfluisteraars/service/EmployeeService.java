@@ -16,7 +16,7 @@ public interface EmployeeService {
 
     public long createEmployee(Employee employee);
 
-    public void partialUpdateEmployee(long id, Map<String, String> fields);
+    public void editEmployee(long id, Map<String, String> fields);
 
     public void deleteEmployee(long id);
 
