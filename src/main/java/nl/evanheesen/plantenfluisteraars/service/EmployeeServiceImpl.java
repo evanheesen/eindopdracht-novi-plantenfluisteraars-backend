@@ -104,6 +104,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (!employeeRepository.existsById(id)) {
             throw new RecordNotFoundException();
         }
+        Employee employee = employeeRepository.findById(id).get();
+        removeEmployeeFromGardens(id);
+        String username = employee.getUser().getUsername();
+        userRepository.deleteById(username);
         employeeRepository.deleteById(id);
     }
 

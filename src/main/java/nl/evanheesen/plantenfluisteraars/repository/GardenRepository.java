@@ -1,7 +1,6 @@
 package nl.evanheesen.plantenfluisteraars.repository;
 
 import nl.evanheesen.plantenfluisteraars.model.Garden;
-//import nl.evanheesen.plantenfluisteraars.model.GardenKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 

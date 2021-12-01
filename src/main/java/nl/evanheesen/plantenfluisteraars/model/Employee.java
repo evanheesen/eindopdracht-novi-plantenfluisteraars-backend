@@ -49,6 +49,10 @@ public class Employee {
     private DBFile dbFile;
 
     @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "employee")
+    private User user;
+
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
     List<Garden> gardens;
 
