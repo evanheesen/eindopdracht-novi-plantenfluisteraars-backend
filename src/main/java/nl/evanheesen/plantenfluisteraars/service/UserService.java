@@ -24,8 +24,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -59,10 +61,6 @@ public class UserService {
 
     public Optional<User> getUser(String username) {
         return userRepository.findById(username);
-    }
-
-    public boolean userExists(String username) {
-        return userRepository.existsById(username);
     }
 
     public String createUser(UserPostRequest userPostRequest) {
