@@ -146,40 +146,61 @@ public class GardenService {
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "firstname":
-                    garden.getCustomer().setFirstName((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.getCustomer().setFirstName((String) fields.get(field));
+                    }
                     break;
                 case "lastname":
-                    garden.getCustomer().setLastName((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.getCustomer().setLastName((String) fields.get(field));
+                    }
                     break;
                 case "street":
-                    garden.setStreet((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setStreet((String) fields.get(field));
+                    }
                     break;
                 case "housenumber":
-                    garden.setHouseNumber((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setHouseNumber((String) fields.get(field));
+                    }
                     break;
                 case "postalcode":
-                    garden.setPostalCode((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setPostalCode((String) fields.get(field));
+                    }
                     break;
                 case "city":
-                    garden.setCity((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setCity((String) fields.get(field));
+                    }
                     break;
                 case "packageplants":
                     String newPackage = fields.get(field);
-                    String currentPackage = garden.getPackagePlants();
-                    if (!newPackage.equals(currentPackage)) {
+                    if (!newPackage.equalsIgnoreCase("packageDefault")) {
                         garden.setPackagePlants(newPackage);
                     }
                     break;
                 case "status":
                     String newStatus = fields.get(field);
                     String currentStatus = garden.getStatus();
-                    if (!newStatus.equals(currentStatus)) {
+                    if (!newStatus.equalsIgnoreCase("statusDefault")) {
                         long employeeId = garden.getEmployee().getId();
-                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond") || newStatus.equals("Inactief")) && garden.getStatus().equals("Actief")) {
+                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond") || newStatus.equals("Inactief")) && currentStatus.equals("Actief")) {
                             deleteEmployeeFromGarden(id, employeeId, newStatus);
                         } else {
                             garden.setStatus(newStatus);
                         }
+                    }
+                    break;
+                case "employee":
+                    String newEmployee = fields.get(field);
+                    if (!newEmployee.equalsIgnoreCase("employeeDefault")) {
+                        Long idNewEmployee = Long.valueOf(newEmployee);
+                        Long idCurrentEmployee = garden.getEmployee().getId();
+                        String gardenStatus = "Actief";
+                        deleteEmployeeFromGarden(id, idCurrentEmployee, gardenStatus);
+                        addEmployeeToGarden(id, idNewEmployee);
                     }
                     break;
                 default:
