@@ -186,7 +186,7 @@ public class GardenService {
                     String currentStatus = garden.getStatus();
                     if (!newStatus.equalsIgnoreCase("statusDefault")) {
                         long employeeId = garden.getEmployee().getId();
-                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond") || newStatus.equals("Inactief")) && currentStatus.equals("Actief")) {
+                        if ((newStatus.equals("Open") || newStatus.equals("Afgerond")) && currentStatus.equals("Actief")) {
                             deleteEmployeeFromGarden(id, employeeId, newStatus);
                         } else {
                             garden.setStatus(newStatus);
@@ -197,9 +197,6 @@ public class GardenService {
                     String newEmployee = fields.get(field);
                     if (!newEmployee.equalsIgnoreCase("employeeDefault")) {
                         Long idNewEmployee = Long.valueOf(newEmployee);
-                        Long idCurrentEmployee = garden.getEmployee().getId();
-                        String gardenStatus = "Actief";
-                        deleteEmployeeFromGarden(id, idCurrentEmployee, gardenStatus);
                         addEmployeeToGarden(id, idNewEmployee);
                     }
                     break;
