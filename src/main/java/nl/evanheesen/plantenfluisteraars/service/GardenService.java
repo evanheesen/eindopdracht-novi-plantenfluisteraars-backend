@@ -212,9 +212,12 @@ public class GardenService {
             throw new RecordNotFoundException();
         }
         Garden garden = gardenRepository.findById(id).get();
-        long employeeId = garden.getEmployee().getId();
-        String employeeStatus = garden.getEmployee().getStatus();
-        deleteEmployeeFromGarden(id, employeeId, employeeStatus);
+        Employee employee = garden.getEmployee();
+        if (employee != null) {
+            long employeeId = garden.getEmployee().getId();
+            String employeeStatus = garden.getEmployee().getStatus();
+            deleteEmployeeFromGarden(id, employeeId, employeeStatus);
+        }
         gardenRepository.deleteById(id);
     }
 
