@@ -67,30 +67,43 @@ public class EmployeeServiceImpl implements EmployeeService {
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "firstname":
-                    employee.setFirstName((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setFirstName((String) fields.get(field));
+                    }
                     break;
                 case "lastname":
-                    employee.setLastName((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setLastName((String) fields.get(field));
+                    }
                     break;
                 case "street":
-                    employee.setStreet((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setStreet((String) fields.get(field));
+                    }
                     break;
                 case "housenumber":
-                    employee.setHouseNumber((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setHouseNumber((String) fields.get(field));
+                    }
                     break;
                 case "postalcode":
-                    employee.setPostalCode((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setPostalCode((String) fields.get(field));
+                    }
                     break;
                 case "city":
-                    employee.setCity((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setCity((String) fields.get(field));
+                    }
                     break;
                 case "phone":
-                    employee.setPhone((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        employee.setPhone((String) fields.get(field));
+                    }
                     break;
                 case "status":
                     String newStatus = fields.get(field);
-                    String currentStatus = employee.getStatus();
-                    if (!newStatus.equals(currentStatus) && newStatus.equals("Inactief")) {
+                    if (!newStatus.equalsIgnoreCase("statusDefault") && newStatus.equals("Inactief")) {
                         employee.setStatus("Inactief");
                         removeEmployeeFromGardens(id);
                     }

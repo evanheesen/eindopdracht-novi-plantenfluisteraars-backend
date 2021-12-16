@@ -77,19 +77,6 @@ public class UserService {
         }
     }
 
-//// createUser zoals in Books voorbeeld:
-
-//        String randomString = RandomStringGenerator.generateAlphaNumeric(20);
-//        user.setApikey(randomString);
-//
-//        String password = user.getPassword();
-//        String encoded = passwordEncoder.encode(password);
-//        user.setPassword(encoded);
-//
-//        User newUser = userRepository.save(user);
-//        return newUser.getUsername();
-//    }
-
     public void deleteUser(String username) {
         if (userRepository.existsById(username)) {
             userRepository.deleteById(username);
