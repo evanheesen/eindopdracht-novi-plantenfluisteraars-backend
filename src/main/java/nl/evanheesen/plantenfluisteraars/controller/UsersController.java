@@ -84,5 +84,10 @@ public class UsersController {
         userService.assignCustomerToUser(username, customerId);
     }
 
+    @PatchMapping(value = "/edit/{username}")
+    public ResponseEntity<Object> editUser(@PathVariable("username") String username, @RequestBody Map<String, String> fields) {
+        userService.editUser(username, fields);
+        return ResponseEntity.noContent().build();
+    }
 
 }

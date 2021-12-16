@@ -23,10 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,7 +106,7 @@ public class UserService {
             User user = userOptional.get();
             user.setPassword(passwordEncoder.encode(newUser.getPassword()));
             user.setEmail(newUser.getEmail());
-            user.setEnabled(newUser.isEnabled());
+            user.setEnabled(newUser.getEnabled());
             userRepository.save(user);
         }
     }
@@ -219,6 +216,33 @@ public class UserService {
                 throw new BadRequestException("Kan de gebruiker niet aanmaken");
             }
         }
+    }
+
+    public void editUser(String username, Map<String, String> fields) {
+        if (!userRepository.existsById(username)) {
+            throw new RecordNotFoundException();
+        }
+        User user = userRepository.findById(username).get();
+        for (String field : fields.keySet()) {
+            switch (field.toLowerCase()) {
+                case "status":
+                    String newStatus = fields.get(field);
+                    if (!newStatus.equals("statusDefault")) {
+                        Boolean newStatusBoolean;
+                        newStatusBoolean = newStatus.equals("Actief");
+                        user.setEnabled(newStatusBoolean);
+                    }
+                    break;
+                case "email":
+                    if (!fields.get(field).equals("")) {
+                        user.setEmail((String) fields.get(field));
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + field.toLowerCase());
+            }
+        }
+        userRepository.save(user);
     }
 
 //    User user = new User();

@@ -72,7 +72,7 @@ public class GardensController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Object> deleteGarden(@PathVariable("id") long id) {
-        gardenService.deleteGarden(id);
+         gardenService.deleteGarden(id);
         return ResponseEntity.noContent().build();
     }
 
