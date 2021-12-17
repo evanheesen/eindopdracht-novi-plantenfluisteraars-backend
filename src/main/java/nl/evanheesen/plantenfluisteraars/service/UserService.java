@@ -6,6 +6,7 @@ import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
 import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
+import nl.evanheesen.plantenfluisteraars.exception.UsernameExistsAlready;
 import nl.evanheesen.plantenfluisteraars.model.Authority;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.User;
@@ -57,22 +58,27 @@ public class UserService {
     }
 
     public String createUser(UserPostRequest userPostRequest) {
-        try {
-            String encryptedPassword = passwordEncoder.encode(userPostRequest.getPassword());
+        String username = userPostRequest.getUsername();
+        if (userRepository.existsById(username)) {
+            throw new UsernameExistsAlready(username);
+        } else {
+            try {
+                String encryptedPassword = passwordEncoder.encode(userPostRequest.getPassword());
 
-            User user = new User();
-            user.setUsername(userPostRequest.getUsername());
-            user.setPassword(encryptedPassword);
-            user.setEmail(userPostRequest.getEmail());
-            user.setEnabled(true);
-            if (userPostRequest.getIsAdmin().equals(true)) {
-                user.addAuthority("ROLE_ADMIN");
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(encryptedPassword);
+                user.setEmail(userPostRequest.getEmail());
+                user.setEnabled(true);
+                if (userPostRequest.getIsAdmin().equals(true)) {
+                    user.addAuthority("ROLE_ADMIN");
+                }
+                user.addAuthority("ROLE_USER");
+                User newUser = userRepository.save(user);
+                return newUser.getUsername();
+            } catch (Exception ex) {
+                throw new BadRequestException("Kan de gebruiker niet aanmaken");
             }
-            user.addAuthority("ROLE_USER");
-            User newUser = userRepository.save(user);
-            return newUser.getUsername();
-        } catch (Exception ex) {
-            throw new BadRequestException("Kan de gebruiker niet aanmaken");
         }
     }
 
