@@ -33,16 +33,12 @@ public class UserService {
     private EmployeeRepository employeeRepository;
     private CustomerRepository customerRepository;
     PasswordEncoder passwordEncoder;
-//    Dit toegevoegd voor DTO:
-//    private ModelMapper mapper;
-
 
     @Autowired
     public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, PasswordEncoder passwordEncoder, ModelMapper mapper) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
-//        this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -69,6 +65,9 @@ public class UserService {
             user.setPassword(encryptedPassword);
             user.setEmail(userPostRequest.getEmail());
             user.setEnabled(true);
+            if (userPostRequest.getIsAdmin().equals(true)) {
+                user.addAuthority("ROLE_ADMIN");
+            }
             user.addAuthority("ROLE_USER");
             User newUser = userRepository.save(user);
             return newUser.getUsername();
@@ -109,13 +108,11 @@ public class UserService {
     }
 
     public void addAuthority(String username, String authorityString) {
-// Ophalen user:
         Optional<User> userOptional = userRepository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException();
         } else {
             User user = userOptional.get();
-// Toevoegen authority:
             user.addAuthority(authorityString);
             userRepository.save(user);
         }
@@ -158,7 +155,6 @@ public class UserService {
         }
     }
 
-    //    Dit toegevoegd voor DTO:
     public String createCustomerUser(CustomerRequest customerRequest) {
         var username = customerRequest.getUsername();
         var optionalUser = userRepository.findById(username);
@@ -231,60 +227,5 @@ public class UserService {
         }
         userRepository.save(user);
     }
-
-//    User user = new User();
-//        user.setUsername(customerRequest.getUsername());
-//        user.setPassword(customerRequest.getPassword());
-//        user.setEmail(customerRequest.getEmail());
-//        user.setEnabled(true);
-//        user.addAuthority("ROLE_USER");
-//        return user;
-
-    // Dit nog toevoegen?
-
-//    private boolean isValidPassword(String password) {
-//        final int MIN_LENGTH = 8;
-//        final int MIN_DIGITS = 1;
-//        final int MIN_LOWER = 1;
-//        final int MIN_UPPER = 1;
-//        final int MIN_SPECIAL = 1;
-//        final String SPECIAL_CHARS = "@#$%&*!()+=-_";
-//
-//        long countDigit = password.chars().filter(ch -> ch >= '0' && ch <= '9').count();
-//        long countLower = password.chars().filter(ch -> ch >= 'a' && ch <= 'z').count();
-//        long countUpper = password.chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-//        long countSpecial = password.chars().filter(ch -> SPECIAL_CHARS.indexOf(ch) >= 0).count();
-//
-//        boolean validPassword = true;
-//        if (password.length() < MIN_LENGTH) validPassword = false;
-//        if (countLower < MIN_LOWER) validPassword = false;
-//        if (countUpper < MIN_UPPER) validPassword = false;
-//        if (countDigit < MIN_DIGITS) validPassword = false;
-//        if (countSpecial < MIN_SPECIAL) validPassword = false;
-//
-//        return validPassword;
-//    }
-//
-//    public void setPassword(String username, String password) {
-//        if (username.equals(getCurrentUserName())) {
-//            if (isValidPassword(password)) {
-//                Optional<User> userOptional = userRepository.findById(username);
-//                if (userOptional.isPresent()) {
-//                    User user = userOptional.get();
-//                    user.setPassword(passwordEncoder.encode(password));
-//                    userRepository.save(user);
-//                }
-//                else {
-//                    throw new UserNotFoundException(username);
-//                }
-//            }
-//            else {
-//                throw new InvalidPasswordException();
-//            }
-//        }
-//        else {
-//            throw new NotAuthorizedException();
-//        }
-//    }
 
 }
