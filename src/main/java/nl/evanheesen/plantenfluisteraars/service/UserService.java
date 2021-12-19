@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
+import nl.evanheesen.plantenfluisteraars.dto.response.UsernameResponse;
 import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
@@ -47,6 +48,16 @@ public class UserService {
     private String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ((UserDetails) authentication.getPrincipal()).getUsername();
+    }
+
+    public UsernameResponse getUsername(String username) {
+        String response;
+        if (userRepository.existsById(username)) {
+            response = "none";
+        } else {
+            response = username;
+        }
+        return new UsernameResponse(response);
     }
 
     public Collection<User> getUsers() {

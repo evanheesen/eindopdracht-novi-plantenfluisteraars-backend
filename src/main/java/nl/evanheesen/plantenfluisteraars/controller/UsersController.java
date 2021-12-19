@@ -1,6 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.controller;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
+import nl.evanheesen.plantenfluisteraars.dto.response.UsernameResponse;
 import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
 import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.service.UserService;
@@ -24,7 +25,15 @@ public class UsersController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @GetMapping(value = "/{username}")
+    @GetMapping(value = "/getusername/{username}")
+    public ResponseEntity<?> getUsername(@PathVariable("username") String username) {
+
+        UsernameResponse usernameResponse = userService.getUsername(username);
+
+        return ResponseEntity.ok(usernameResponse);
+    }
+
+    @GetMapping(value = "/user/{username}")
     public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
