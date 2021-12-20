@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
+import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
@@ -68,12 +69,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customer);
     }
 
-//    public void deleteCustomer(long id) {
-//        if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
-//        customerRepository.deleteById(id);
-//        if (!customerRepository.existsById(id)) { throw new RecordNotFoundException(); }
-//    }
-
     public CustomerRequest convertCustomerToDTO(Customer customer) {
         CustomerRequest customerRequest = new CustomerRequest();
         customerRequest.setFirstName(customer.getFirstName());
@@ -91,8 +86,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public void assignGardenToCustomer(long gardenId, long customerId) {
-        var optionalGarden = gardenRepository.findById(gardenId);
-        var optionalCustomer = customerRepository.findById(customerId);
+        Optional<Garden> optionalGarden = gardenRepository.findById(gardenId);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+//        var optionalGarden = gardenRepository.findById(gardenId);
+//        var optionalCustomer = customerRepository.findById(customerId);
         if (optionalGarden.isPresent() && optionalCustomer.isPresent()) {
             var garden = optionalGarden.get();
             var customer = optionalCustomer.get();
