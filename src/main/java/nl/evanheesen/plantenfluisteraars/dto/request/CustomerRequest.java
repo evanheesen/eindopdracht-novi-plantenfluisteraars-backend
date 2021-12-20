@@ -2,7 +2,6 @@ package nl.evanheesen.plantenfluisteraars.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

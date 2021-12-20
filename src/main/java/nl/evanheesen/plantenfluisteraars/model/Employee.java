@@ -14,7 +14,6 @@ import javax.persistence.OneToOne;
 @Table(name = "employees")
 public class Employee {
 
-    // attributen
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, name = "employee_id")

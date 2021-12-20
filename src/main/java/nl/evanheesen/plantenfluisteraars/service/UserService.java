@@ -10,23 +10,16 @@ import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UsernameExistsAlready;
 import nl.evanheesen.plantenfluisteraars.model.Authority;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
+import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
-import nl.evanheesen.plantenfluisteraars.utils.RandomStringGenerator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -42,12 +35,6 @@ public class UserService {
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    // Add in controller still!!
-    private String getCurrentUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return ((UserDetails) authentication.getPrincipal()).getUsername();
     }
 
     public UsernameResponse getUsername(String username) {
@@ -70,7 +57,8 @@ public class UserService {
 
     public String createUser(UserPostRequest userPostRequest) {
         String username = userPostRequest.getUsername();
-        if (userRepository.existsById(username)) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isPresent()) {
             throw new UsernameExistsAlready(username);
         } else {
             try {
@@ -94,7 +82,8 @@ public class UserService {
     }
 
     public void deleteUser(String username) {
-        if (userRepository.existsById(username)) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isPresent()) {
             userRepository.deleteById(username);
         } else {
             throw new UserNotFoundException(username);
@@ -102,11 +91,11 @@ public class UserService {
     }
 
     public void updateUser(String username, User newUser) {
-        Optional<User> userOptional = userRepository.findById(username);
-        if (userOptional.isEmpty()) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException();
         } else {
-            User user = userOptional.get();
+            User user = optionalUser.get();
             user.setPassword(passwordEncoder.encode(newUser.getPassword()));
             user.setEmail(newUser.getEmail());
             user.setEnabled(newUser.getEnabled());
@@ -115,43 +104,43 @@ public class UserService {
     }
 
     public Set<Authority> getAuthorities(String username) {
-        Optional<User> userOptional = userRepository.findById(username);
-        if (userOptional.isEmpty()) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException();
         } else {
-            User user = userOptional.get();
+            User user = optionalUser.get();
             return user.getAuthorities();
         }
     }
 
     public void addAuthority(String username, String authorityString) {
-        Optional<User> userOptional = userRepository.findById(username);
-        if (userOptional.isEmpty()) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException();
         } else {
-            User user = userOptional.get();
+            User user = optionalUser.get();
             user.addAuthority(authorityString);
             userRepository.save(user);
         }
     }
 
     public void removeAuthority(String username, String authorityString) {
-        Optional<User> userOptional = userRepository.findById(username);
-        if (userOptional.isEmpty()) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new UserNotFoundException(username);
         } else {
-            User user = userOptional.get();
+            User user = optionalUser.get();
             user.removeAuthority(authorityString);
             userRepository.save(user);
         }
     }
 
     public void assignEmployeeToUser(String username, long employeeId) {
-        var optionalUser = userRepository.findById(username);
-        var optionalEmployee = employeeRepository.findById(employeeId);
+        Optional<User> optionalUser = userRepository.findById(username);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalUser.isPresent() && optionalEmployee.isPresent()) {
-            var user = optionalUser.get();
-            var employee = optionalEmployee.get();
+            User user = optionalUser.get();
+            Employee employee = optionalEmployee.get();
             user.setEmployee(employee);
             userRepository.save(user);
         } else {
@@ -160,11 +149,11 @@ public class UserService {
     }
 
     public void assignCustomerToUser(String username, long customerId) {
-        var optionalUser = userRepository.findById(username);
-        var optionalCustomer = customerRepository.findById(customerId);
+        Optional<User> optionalUser = userRepository.findById(username);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
         if (optionalUser.isPresent() && optionalCustomer.isPresent()) {
-            var user = optionalUser.get();
-            var customer = optionalCustomer.get();
+            User user = optionalUser.get();
+            Customer customer = optionalCustomer.get();
             user.setCustomer(customer);
             userRepository.save(user);
         } else {
@@ -173,8 +162,8 @@ public class UserService {
     }
 
     public String createCustomerUser(CustomerRequest customerRequest) {
-        var username = customerRequest.getUsername();
-        var optionalUser = userRepository.findById(username);
+        String username = customerRequest.getUsername();
+        Optional<User> optionalUser = userRepository.findById(username);
         if (optionalUser.isPresent()) {
             throw new UserNotFoundException(username);
         } else {
@@ -196,8 +185,8 @@ public class UserService {
     }
 
     public String createEmployeeUser(EmployeeRequest employeeRequest) {
-        var username = employeeRequest.getUsername();
-        var optionalUser = userRepository.findById(username);
+        String username = employeeRequest.getUsername();
+        Optional<User> optionalUser = userRepository.findById(username);
         if (optionalUser.isPresent()) {
             throw new UserNotFoundException(username);
         } else {
@@ -219,10 +208,11 @@ public class UserService {
     }
 
     public void editUser(String username, Map<String, String> fields) {
-        if (!userRepository.existsById(username)) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException();
         }
-        User user = userRepository.findById(username).get();
+        User user = optionalUser.get();
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "status":

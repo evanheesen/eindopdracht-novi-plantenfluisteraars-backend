@@ -1,9 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
-import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
-import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
@@ -37,14 +35,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public Iterable<Employee> getEmployeesByStatus(String status) {
-        Iterable<Employee> employees = employeeRepository.findAllByStatusIgnoreCase(status);
-        return employees;
+        return employeeRepository.findAllByStatusIgnoreCase(status);
     }
 
     public Optional<Employee> getEmployeeById(long id) {
-        if (!employeeRepository.existsById(id))
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isEmpty())
             throw new RecordNotFoundException("Plantenfluisteraar met id " + id + " niet gevonden.");
-        return employeeRepository.findById(id);
+        return optionalEmployee;
     }
 
     public long createEmployee(Employee employee) {
@@ -60,10 +58,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public void editEmployee(long id, Map<String, String> fields) {
-        if (!employeeRepository.existsById(id)) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isEmpty()) {
             throw new RecordNotFoundException();
         }
-        Employee employee = employeeRepository.findById(id).get();
+        Employee employee = optionalEmployee.get();
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "firstname":
@@ -114,10 +113,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public void deleteEmployee(long id) {
-        if (!employeeRepository.existsById(id)) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isEmpty()) {
             throw new RecordNotFoundException();
         }
-        Employee employee = employeeRepository.findById(id).get();
+        Employee employee = optionalEmployee.get();
         removeEmployeeFromGardens(id);
         String username = employee.getUser().getUsername();
         userRepository.deleteById(username);

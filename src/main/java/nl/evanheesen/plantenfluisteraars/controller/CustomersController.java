@@ -29,26 +29,25 @@ public class CustomersController {
         this.gardenService = gardenService;
     }
 
-    @GetMapping("") // get collection
+    @GetMapping("")
     public ResponseEntity<Object> getCustomers() {
         return ResponseEntity.ok().body(customerService.getCustomers());
     }
 
-    @GetMapping("/{id}") // get item
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getCustomer(@PathVariable long id) {
         return ResponseEntity.ok().body(customerService.getCustomerById(id));
     }
 
     @PostMapping(value = "")
     public ResponseEntity<Object> newCustomerRegistration(@RequestBody CustomerRequest customerRequest) {
-//        convert DTO to entity
         Customer customer = customerService.convertDTOToCustomer(customerRequest);
         String username = userService.createCustomerUser(customerRequest);
         Garden garden = gardenService.convertDTOToGarden(customerRequest);
         long customerId = customerService.createCustomer(customer);
         long gardenId = gardenService.addGarden(garden);
 
-                URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/bewoners/{id}")
+                URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(customerId).toUri();
 
         userService.assignCustomerToUser(username, customerId);
@@ -61,11 +60,5 @@ public class CustomersController {
         customerService.partialUpdateCustomer(id, fields);
         return ResponseEntity.noContent().build();
     }
-
-//    @DeleteMapping(value = "/{id}")
-//    public ResponseEntity<Object> deleteCustomer(@PathVariable("id") long id) {
-//        customerService.deleteCustomer(id);
-//        return ResponseEntity.noContent().build();
-//    }
 
 }

@@ -2,13 +2,10 @@ package nl.evanheesen.plantenfluisteraars.controller;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
-import nl.evanheesen.plantenfluisteraars.model.User;
-import nl.evanheesen.plantenfluisteraars.service.CustomerService;
 import nl.evanheesen.plantenfluisteraars.service.EmployeeService;
 import nl.evanheesen.plantenfluisteraars.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -46,7 +43,7 @@ public class EmployeesController {
 
     @PostMapping(value = "")
     public ResponseEntity<Object> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
-//        convert DTO to entity
+
         Employee employee = employeeService.convertDTOToEmployee(employeeRequest);
         String username = userService.createEmployeeUser(employeeRequest);
         long employeeId = employeeService.createEmployee(employee);

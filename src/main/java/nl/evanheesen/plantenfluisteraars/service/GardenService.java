@@ -3,14 +3,11 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.exception.NotAuthorizedException;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
-import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.Garden;
-import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
 import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,14 +25,14 @@ public class GardenService {
     }
 
     public Collection<Garden> getAllGardens() {
-        Collection<Garden> gardens = gardenRepository.findAll();
-        return gardens;
+        return gardenRepository.findAll();
     }
 
     public Optional<Garden> getGardenById(long id) {
-        if (!gardenRepository.existsById(id))
+        Optional<Garden> optionalGarden = gardenRepository.findById(id);
+        if (optionalGarden.isEmpty())
             throw new RecordNotFoundException("Geveltuintje met id " + id + " niet gevonden.");
-        return gardenRepository.findById(id);
+        return optionalGarden;
     }
 
     public Collection<Garden> getGardensByStatus(String status) {
@@ -102,10 +99,11 @@ public class GardenService {
     }
 
     public void updateGarden(long id, long employeeId, Map<String, String> fields) {
-        if (!gardenRepository.existsById(id)) {
+        Optional<Garden> optionalGarden = gardenRepository.findById(id);
+        if (optionalGarden.isEmpty()) {
             throw new RecordNotFoundException("Geveltuin kan niet gevonden worden");
         }
-        Garden garden = gardenRepository.findById(id).get();
+        Garden garden = optionalGarden.get();
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "status":
@@ -139,10 +137,11 @@ public class GardenService {
     }
 
     public void editGardenByAdmin(long id, Map<String, String> fields) {
-        if (!gardenRepository.existsById(id)) {
+        Optional<Garden> optionalGarden = gardenRepository.findById(id);
+        if (optionalGarden.isEmpty()) {
             throw new RecordNotFoundException();
         }
-        Garden garden = gardenRepository.findById(id).get();
+        Garden garden = optionalGarden.get();
         for (String field : fields.keySet()) {
             switch (field.toLowerCase()) {
                 case "firstname":
@@ -208,10 +207,11 @@ public class GardenService {
     }
 
     public void deleteGarden(long id) {
-        if (!gardenRepository.existsById(id)) {
+        Optional<Garden> optionalGarden = gardenRepository.findById(id);
+        if (optionalGarden.isEmpty()) {
             throw new RecordNotFoundException();
         }
-        Garden garden = gardenRepository.findById(id).get();
+        Garden garden = optionalGarden.get();
         Employee employee = garden.getEmployee();
         if (employee != null) {
             long employeeId = garden.getEmployee().getId();
