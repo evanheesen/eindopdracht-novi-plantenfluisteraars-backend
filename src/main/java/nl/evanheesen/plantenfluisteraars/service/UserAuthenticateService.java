@@ -3,6 +3,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.dto.request.AuthenticationRequest;
 import nl.evanheesen.plantenfluisteraars.dto.response.AuthenticationResponse;
 import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
+import nl.evanheesen.plantenfluisteraars.exception.NotAuthorizedException;
 import nl.evanheesen.plantenfluisteraars.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,6 +41,9 @@ public class UserAuthenticateService {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
+        if (!userDetails.isEnabled()) {
+            throw new NotAuthorizedException("Gebruiker is inactief");
+        }
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt);
