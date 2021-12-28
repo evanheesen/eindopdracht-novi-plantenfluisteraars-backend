@@ -37,6 +37,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public Collection<User> getUsers() {
+        return userRepository.findAll();
+    }
+
     public UsernameResponse getUsername(String username) {
         String response;
         if (userRepository.existsById(username)) {
@@ -45,10 +49,6 @@ public class UserService {
             response = username;
         }
         return new UsernameResponse(response);
-    }
-
-    public Collection<User> getUsers() {
-        return userRepository.findAll();
     }
 
     public Optional<User> getUser(String username) {
@@ -87,51 +87,6 @@ public class UserService {
             userRepository.deleteById(username);
         } else {
             throw new UserNotFoundException(username);
-        }
-    }
-
-    public void updateUser(String username, User newUser) {
-        Optional<User> optionalUser = userRepository.findById(username);
-        if (optionalUser.isEmpty()) {
-            throw new RecordNotFoundException();
-        } else {
-            User user = optionalUser.get();
-            user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            user.setEmail(newUser.getEmail());
-            user.setEnabled(newUser.getEnabled());
-            userRepository.save(user);
-        }
-    }
-
-    public Set<Authority> getAuthorities(String username) {
-        Optional<User> optionalUser = userRepository.findById(username);
-        if (optionalUser.isEmpty()) {
-            throw new RecordNotFoundException();
-        } else {
-            User user = optionalUser.get();
-            return user.getAuthorities();
-        }
-    }
-
-    public void addAuthority(String username, String authorityString) {
-        Optional<User> optionalUser = userRepository.findById(username);
-        if (optionalUser.isEmpty()) {
-            throw new RecordNotFoundException();
-        } else {
-            User user = optionalUser.get();
-            user.addAuthority(authorityString);
-            userRepository.save(user);
-        }
-    }
-
-    public void removeAuthority(String username, String authorityString) {
-        Optional<User> optionalUser = userRepository.findById(username);
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException(username);
-        } else {
-            User user = optionalUser.get();
-            user.removeAuthority(authorityString);
-            userRepository.save(user);
         }
     }
 

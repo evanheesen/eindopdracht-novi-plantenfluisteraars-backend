@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
-import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3001", maxAge = 3600)
 @RestController
@@ -29,16 +28,6 @@ public class CustomersController {
         this.gardenService = gardenService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<Object> getCustomers() {
-        return ResponseEntity.ok().body(customerService.getCustomers());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getCustomer(@PathVariable long id) {
-        return ResponseEntity.ok().body(customerService.getCustomerById(id));
-    }
-
     @PostMapping(value = "")
     public ResponseEntity<Object> newCustomerRegistration(@RequestBody CustomerRequest customerRequest) {
         Customer customer = customerService.convertDTOToCustomer(customerRequest);
@@ -53,12 +42,6 @@ public class CustomersController {
         userService.assignCustomerToUser(username, customerId);
         customerService.assignGardenToCustomer(gardenId, customerId);
         return ResponseEntity.created(location).body(location);
-    }
-
-    @PatchMapping(value = "/{id}")
-    public ResponseEntity<Object> updateCustomerPartial(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
-        customerService.partialUpdateCustomer(id, fields);
-        return ResponseEntity.noContent().build();
     }
 
 }

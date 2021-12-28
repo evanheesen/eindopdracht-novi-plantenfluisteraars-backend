@@ -8,18 +8,9 @@ import java.util.Optional;
 
 public interface CustomerService {
 
-    public Iterable<Customer> getCustomers();
-
-    public Optional<Customer> getCustomerById(long id);
-
     public long createCustomer(Customer customer);
 
-    public void partialUpdateCustomer(long id, Map<String, String> fields);
-
     public void assignGardenToCustomer(long gardenId, long customerId);
-
-//    //    Dit toegevoegd voor DTO
-    public CustomerRequest convertCustomerToDTO(Customer customer);
 
     public Customer convertDTOToCustomer(CustomerRequest customerRequest);
 

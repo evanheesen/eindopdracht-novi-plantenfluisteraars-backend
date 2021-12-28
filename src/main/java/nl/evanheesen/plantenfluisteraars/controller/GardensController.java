@@ -46,11 +46,6 @@ public class GardensController {
         return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(id));
     }
 
-    @PutMapping(value = "/{id}/employees/{employeeId}")
-    public void addEmployeeToGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId) {
-        gardenService.addEmployeeToGarden(id, employeeId);
-    }
-
     @PatchMapping(value = "/garden/{id}/employees/{employeeId}")
     public ResponseEntity<Object> updateGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
         gardenService.updateGarden(id, employeeId, fields);

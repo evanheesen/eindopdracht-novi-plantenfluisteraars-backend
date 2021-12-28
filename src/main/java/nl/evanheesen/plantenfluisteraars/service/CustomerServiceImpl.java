@@ -27,51 +27,10 @@ public class CustomerServiceImpl implements CustomerService {
         this.gardenRepository = gardenRepository;
     }
 
-    public Iterable<Customer> getCustomers() {
-        return customerRepository.findAll();
-    }
-
-    public Optional<Customer> getCustomerById(long id) {
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-    if (optionalCustomer.isEmpty())
-        throw new RecordNotFoundException("Bewoner met id " + id + " niet gevonden.");
-    return optionalCustomer;
-    }
 
     public long createCustomer(Customer customer) {
         Customer newCustomer = customerRepository.save(customer);
         return newCustomer.getId();
-    }
-
-    public void partialUpdateCustomer(long id, Map<String, String> fields) {
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        if (optionalCustomer.isEmpty()) {
-            throw new RecordNotFoundException();
-        }
-        Customer customer = optionalCustomer.get();
-        for (String field : fields.keySet()) {
-            switch (field.toLowerCase()) {
-                case "first_name":
-                    customer.setFirstName((String) fields.get(field));
-                    break;
-                case "last_name":
-                    customer.setLastName((String) fields.get(field));
-                    break;
-                case "phone":
-                    customer.setPhone((String) fields.get(field));
-                    break;
-
-            }
-        }
-        customerRepository.save(customer);
-    }
-
-    public CustomerRequest convertCustomerToDTO(Customer customer) {
-        CustomerRequest customerRequest = new CustomerRequest();
-        customerRequest.setFirstName(customer.getFirstName());
-        customerRequest.setLastName(customer.getLastName());
-        customerRequest.setPhone(customer.getPhone());
-        return customerRequest;
     }
 
     public Customer convertDTOToCustomer(CustomerRequest customerRequest) {
