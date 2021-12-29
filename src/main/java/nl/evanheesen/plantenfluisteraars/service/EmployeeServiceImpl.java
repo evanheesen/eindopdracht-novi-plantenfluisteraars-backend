@@ -34,7 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees;
     }
 
-    public Iterable<Employee> getEmployeesByStatus(String status) {
+    public Collection<Employee> getEmployeesByStatus(String status) {
         return employeeRepository.findAllByStatusIgnoreCase(status);
     }
 
