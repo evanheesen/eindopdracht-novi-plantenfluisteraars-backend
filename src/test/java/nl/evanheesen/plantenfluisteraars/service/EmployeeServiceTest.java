@@ -99,11 +99,23 @@ public class EmployeeServiceTest {
     @Test
     public void testEditEmployee() {
         Employee employee1 = new Employee(1L, "Piet", "Jansen");
+        employee1.setStreet("Kerkstraat");
+        employee1.setHouseNumber("900");
+        employee1.setPostalCode("1019PL");
+        employee1.setCity("Amsterdam");
+        employee1.setPhone("0611223344");
+        employee1.setStatus("Actief");
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee1));
 
         Map<String, String> testFields = Map.ofEntries(
                 Map.entry("firstname", "Hans"),
-                Map.entry("lastname", "van Aken")
+                Map.entry("lastname", "van Aken"),
+                Map.entry("street", ""),
+                Map.entry("housenumber", "100"),
+                Map.entry("postalcode", "3054KK"),
+                Map.entry("city", "Utrecht"),
+                Map.entry("phone", "0699887766"),
+                Map.entry("status", "statusDefault")
         );
 
         employeeService.editEmployee(1L, testFields);
@@ -113,6 +125,9 @@ public class EmployeeServiceTest {
         assertThat(employee1.getId()).isEqualTo(1);
         assertThat(employee1.getFirstName()).isEqualTo("Hans");
         assertThat(employee1.getLastName()).isEqualTo("van Aken");
+        assertThat(employee1.getStreet()).isEqualTo("Kerkstraat");
+        assertThat(employee1.getCity()).isEqualTo("Utrecht");
+        assertThat(employee1.getStatus()).isEqualTo("Actief");
     }
 
 //    @Test
