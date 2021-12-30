@@ -54,8 +54,23 @@ public class CustomerServiceTest {
         Customer testCustomer = new Customer();
         testCustomer.setId(1L);
         testCustomer.setFirstName("Jan");
+        var customerId = testCustomer.getId();
 
-        Garden
+        Garden testGarden = new Garden();
+        testGarden.setId(101L);
+        testGarden.setCustomer(testCustomer);
+        var gardenId = testGarden.getId();
+
+        when(gardenRepository.findById(gardenId)).thenReturn(Optional.of(testGarden));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(testCustomer));
+
+        customerService.assignGardenToCustomer(gardenId, customerId);
+
+        verify(gardenRepository).save(testGarden);
+        verify(customerRepository).save(testCustomer);
+
+        assertThat(testCustomer.getGarden()).isEqualTo(testGarden);
+        assertThat(testGarden.getCustomer()).isEqualTo(testCustomer);
 
     }
 
