@@ -3,7 +3,11 @@ package nl.evanheesen.plantenfluisteraars.service;
 import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.exception.RecordNotFoundException;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
+import nl.evanheesen.plantenfluisteraars.model.Garden;
+import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.repository.EmployeeRepository;
+import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
+import nl.evanheesen.plantenfluisteraars.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,6 +27,12 @@ public class EmployeeServiceTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
+
+    @Mock
+    private GardenRepository gardenRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
@@ -81,20 +91,49 @@ public class EmployeeServiceTest {
         assertThat(employee1.getId()).isEqualTo(1);
     }
 
-//    @Test
-//    public void testDeleteEmployee() {
-//        Employee employee = new Employee(1L, "Piet", "Jansen");
-//
-//        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-//        var employee1 = employeeService.getEmployeeById(1L);
-//
-//        employeeRepository.deleteById(1L);
-//
-//        employeeService.deleteEmployee(1L);
-//
-//        verify(employeeRepository, times(1)).delete(employee);
-//
-//    }
+    @Test
+    public void testDeleteEmployee() {
+        User testUser = new User();
+        testUser.setUsername("Piet2021");
+        testUser.setPassword("password");
+        testUser.setEnabled(true);
+        testUser.setEmail("piet@planten.nl");
+        var username = testUser.getUsername();
+
+        Employee testEmployee = new Employee(1L, "Piet", "Jansen");
+        testEmployee.setUser(testUser);
+        var id = testEmployee.getId();
+
+        Collection<Garden> testGardens = new ArrayList<>();
+        Garden garden1 = new Garden();
+        garden1.setId(101L);
+        garden1.setStatus("Actief");
+        garden1.setEmployee(testEmployee);
+        Garden garden2 = new Garden();
+        garden2.setId(102L);
+        garden2.setStatus("Afgerond");
+
+        testGardens.add(garden1);
+        testGardens.add(garden2);
+
+        when(employeeRepository.findById(id)).thenReturn(Optional.of(testEmployee));
+        var employee1 = employeeService.getEmployeeById(id);
+
+        when(gardenRepository.findAllByEmployeeId(id)).thenReturn(testGardens);
+
+//        userRepository.deleteById(testEmployee.getUser().getUsername());
+//        verify(userRepository, times(1)).delete(testUser);
+
+        employeeRepository.deleteById(id);
+
+        employeeService.deleteEmployee(id);
+
+        verify(employeeRepository, times(1)).delete(testEmployee);
+
+        assertThat(garden1.getEmployee()).isEqualTo(null);
+        assertThat(garden1.getStatus()).isEqualTo("Open");
+        assertThat(garden2.getStatus()).isEqualTo("Afgerond");
+    }
 
     @Test
     public void testEditEmployee() {
