@@ -169,24 +169,24 @@ public class EmployeeServiceTest {
         assertThat(employee1.getStatus()).isEqualTo("Actief");
     }
 
-//    @Test
-//    public void testConvertDTOToEmployee() {
-//        Employee employee1 = new Employee();
-//        EmployeeRequest testEmployeeRequest = new EmployeeRequest();
-//        testEmployeeRequest.setUsername("piet2000");
-//        testEmployeeRequest.setPassword("password");
-//        testEmployeeRequest.setEmail("piet@planten.nl");
-//        testEmployeeRequest.setFirstName("Piet");
-//        testEmployeeRequest.setLastName("Jansen");
-//        testEmployeeRequest.setStreet("Kerkstraat");
-//        testEmployeeRequest.setHouseNumber("99");
-//        testEmployeeRequest.setCity("Amsterdam");
-//        testEmployeeRequest.setPhone("0688899911");
-//
-//        employeeService.convertDTOToEmployee(testEmployeeRequest);
-//
-//        assertThat(employee1.getFirstName()).isEqualTo("Piet");
-//        assertThat(employee1.getCity()).isEqualTo("Amsterdam");
-//    }
+    @Test
+    public void testConvertDTOToEmployee() {
+        EmployeeRequest testEmployeeRequest = new EmployeeRequest();
+        testEmployeeRequest.setUsername("piet2000");
+        testEmployeeRequest.setPassword("password");
+        testEmployeeRequest.setEmail("piet@planten.nl");
+        testEmployeeRequest.setFirstName("Piet");
+        testEmployeeRequest.setLastName("Jansen");
+        testEmployeeRequest.setStreet("Kerkstraat");
+        testEmployeeRequest.setHouseNumber("99");
+        testEmployeeRequest.setCity("Amsterdam");
+        testEmployeeRequest.setPhone("0688899911");
+
+        employeeService.convertDTOToEmployee(testEmployeeRequest);
+        Employee testEmployee = employeeService.convertDTOToEmployee(testEmployeeRequest);
+
+        assertThat(testEmployee.getFirstName()).isEqualTo("Piet");
+        assertThat(testEmployee.getCity()).isEqualTo("Amsterdam");
+    }
 
 }

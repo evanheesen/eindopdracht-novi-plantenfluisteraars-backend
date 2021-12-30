@@ -1,10 +1,10 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
+import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +46,20 @@ public class CustomerServiceTest {
 
         assertThat(customer1.getFirstName()).isEqualTo("Jan");
         assertThat(customer1.getId()).isEqualTo(1);
+    }
+
+    @Test
+    public void testConvertDTOToCustomer() {
+        CustomerRequest testCustomerRequest = new CustomerRequest();
+        testCustomerRequest.setFirstName("Jan");
+        testCustomerRequest.setLastName("Klaasen");
+        testCustomerRequest.setPhone("0688899911");
+
+        customerService.convertDTOToCustomer(testCustomerRequest);
+        Customer testCustomer = customerService.convertDTOToCustomer(testCustomerRequest);
+
+        assertThat(testCustomer.getFirstName()).isEqualTo("Jan");
+        assertThat(testCustomer.getPhone()).isEqualTo("0688899911");
     }
 
     @Test
