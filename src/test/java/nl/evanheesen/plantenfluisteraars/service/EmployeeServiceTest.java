@@ -182,7 +182,6 @@ public class EmployeeServiceTest {
         testEmployeeRequest.setCity("Amsterdam");
         testEmployeeRequest.setPhone("0688899911");
 
-        employeeService.convertDTOToEmployee(testEmployeeRequest);
         Employee testEmployee = employeeService.convertDTOToEmployee(testEmployeeRequest);
 
         assertThat(testEmployee.getFirstName()).isEqualTo("Piet");

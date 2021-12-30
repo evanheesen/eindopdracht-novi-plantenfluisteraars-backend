@@ -2,6 +2,7 @@ package nl.evanheesen.plantenfluisteraars.service;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
+import nl.evanheesen.plantenfluisteraars.model.Employee;
 import nl.evanheesen.plantenfluisteraars.model.Garden;
 import nl.evanheesen.plantenfluisteraars.repository.CustomerRepository;
 import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
@@ -55,7 +56,6 @@ public class CustomerServiceTest {
         testCustomerRequest.setLastName("Klaasen");
         testCustomerRequest.setPhone("0688899911");
 
-        customerService.convertDTOToCustomer(testCustomerRequest);
         Customer testCustomer = customerService.convertDTOToCustomer(testCustomerRequest);
 
         assertThat(testCustomer.getFirstName()).isEqualTo("Jan");
@@ -84,7 +84,6 @@ public class CustomerServiceTest {
 
         assertThat(testCustomer.getGarden()).isEqualTo(testGarden);
         assertThat(testGarden.getCustomer()).isEqualTo(testCustomer);
-
     }
 
 }
