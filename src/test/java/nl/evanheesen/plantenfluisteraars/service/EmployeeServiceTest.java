@@ -102,37 +102,30 @@ public class EmployeeServiceTest {
 
         Employee testEmployee = new Employee(1L, "Piet", "Jansen");
         testEmployee.setUser(testUser);
-        var id = testEmployee.getId();
+        var employeeId = testEmployee.getId();
 
         Collection<Garden> testGardens = new ArrayList<>();
         Garden garden1 = new Garden();
         garden1.setId(101L);
         garden1.setStatus("Actief");
         garden1.setEmployee(testEmployee);
-        Garden garden2 = new Garden();
-        garden2.setId(102L);
-        garden2.setStatus("Afgerond");
 
         testGardens.add(garden1);
-        testGardens.add(garden2);
 
-        when(employeeRepository.findById(id)).thenReturn(Optional.of(testEmployee));
-        var employee1 = employeeService.getEmployeeById(id);
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(testEmployee));
 
-        when(gardenRepository.findAllByEmployeeId(id)).thenReturn(testGardens);
+        when(gardenRepository.findAllByEmployeeId(employeeId)).thenReturn(testGardens);
 
-//        userRepository.deleteById(testEmployee.getUser().getUsername());
-//        verify(userRepository, times(1)).delete(testUser);
+        employeeService.deleteEmployee(employeeId);
 
-        employeeRepository.deleteById(id);
+        verify(employeeRepository, times(1)).findById(employeeId);
+        verify(gardenRepository, times(1)).findAllByEmployeeId(employeeId);
+        verify(gardenRepository).save(garden1);
+        verify(userRepository).deleteById(username);
+        verify(employeeRepository, times(1)).deleteById(employeeId);
 
-        employeeService.deleteEmployee(id);
-
-        verify(employeeRepository, times(1)).delete(testEmployee);
-
-        assertThat(garden1.getEmployee()).isEqualTo(null);
         assertThat(garden1.getStatus()).isEqualTo("Open");
-        assertThat(garden2.getStatus()).isEqualTo("Afgerond");
+        assertThat(garden1.getEmployee()).isEqualTo(null);
     }
 
     @Test
