@@ -30,7 +30,7 @@ private DataSource dataSource;
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    WebSecurityConfiguration(@Lazy DataSource dataSource, @Lazy JwtRequestFilter jwtRequestFilter) {
+    WebSecurityConfiguration(DataSource dataSource, JwtRequestFilter jwtRequestFilter) {
         this.dataSource = dataSource;
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -65,6 +65,8 @@ private DataSource dataSource;
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+                .httpBasic()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers(POST,"/authenticate").permitAll()

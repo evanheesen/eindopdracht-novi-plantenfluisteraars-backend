@@ -20,7 +20,6 @@ import org.mockito.quality.Strictness;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -197,14 +196,14 @@ public class GardenServiceTest {
 
     @Test
     public void testAddGarden() {
-        Garden testGarden = new Garden();
-        testGarden.setId(1L);
-        testGarden.setStreet("Kalverstraat");
+        Garden garden1 = new Garden();
+        garden1.setId(1L);
+        garden1.setStreet("Kalverstraat");
 
-        gardenRepository.save(testGarden);
+        gardenRepository.save(garden1);
 
         verify(gardenRepository, times(1)).save(gardenCaptor.capture());
-        var garden1 = gardenCaptor.getValue();
+        var testGarden = gardenCaptor.getValue();
 
         assertThat(garden1.getId()).isEqualTo(1);
         assertThat(garden1.getStreet()).isEqualTo("Kalverstraat");
@@ -237,7 +236,7 @@ public class GardenServiceTest {
 
         Garden garden1 = new Garden();
         garden1.setId(1L);
-        garden1.setStatus("Inactief");
+        garden1.setStatus("Open");
         var gardenId = garden1.getId();
 
         when(gardenRepository.findById(1L)).thenReturn(Optional.of(garden1));
@@ -247,10 +246,89 @@ public class GardenServiceTest {
 
         verify(gardenRepository, times(1)).findById(1L);
         verify(employeeRepository, times(1)).findById(101L);
+        verify(gardenRepository).save(garden1);
 
         assertThat(garden1.getEmployee()).isEqualTo(employee1);
         assertThat(garden1.getStatus()).isEqualTo("Actief");
         assertThat(employee1.getStatus()).isEqualTo("Actief");
+    }
+
+    @Test
+    public void testDeleteEmployeeFromGarden() {
+        Employee employee1 = new Employee(101L, "Piet", "Jansen");
+        var employeeId = employee1.getId();
+
+        List<Garden> testGardens = new ArrayList<>();
+        Garden garden1 = new Garden();
+        garden1.setId(1L);
+        garden1.setStreet("Kalverstraat");
+        garden1.setStatus("Actief");
+        garden1.setEmployee(employee1);
+        var garden1Id = garden1.getId();
+        Garden garden2 = new Garden();
+        garden2.setId(2L);
+        garden2.setStreet("Wibautstraat");
+        garden2.setStatus("Open");
+
+        testGardens.add(garden1);
+
+        when(gardenRepository.findById(1L)).thenReturn(Optional.of(garden1));
+        when(employeeRepository.findById(101L)).thenReturn(Optional.of(employee1));
+        when(gardenRepository.findAllByEmployeeId(101L)).thenReturn(testGardens);
+
+        gardenService.deleteEmployeeFromGarden(garden1Id, employeeId, "Afgerond");
+
+        verify(gardenRepository, times(1)).findById(1L);
+        verify(employeeRepository, times(1)).findById(101L);
+        verify(gardenRepository, times(1)).findAllByEmployeeId(101L);
+        verify(gardenRepository).save(garden1);
+
+        assertThat(garden1.getEmployee()).isEqualTo(null);
+        assertThat(garden1.getStatus()).isEqualTo("Afgerond");
+        assertThat(employee1.getStatus()).isEqualTo("Inactief");
+    }
+
+    @Test
+    public void testEditGardenByEmployee() {
+        Garden garden1 = new Garden();
+        garden1.setId(1L);
+        garden1.setStatus("Open");
+        garden1.setStreet("Neude");
+        garden1.setHouseNumber("100");
+        garden1.setPostalCode("3091FG");
+        garden1.setCity("Utrecht");
+        garden1.setPackagePlants("Pakket 2");
+        var gardenId = garden1.getId();
+
+        Employee employee1 = new Employee(101L, "Piet", "Jansen");
+        var employeeId = employee1.getId();
+
+        Map<String, String> testFields = Map.ofEntries(
+                Map.entry("street", "Nassaukade"),
+                Map.entry("houseNumber", "66"),
+                Map.entry("postalCode", "1016TK"),
+                Map.entry("city", "Amsterdam"),
+                Map.entry("phone", "0699887766"),
+                Map.entry("status", "Actief"),
+                Map.entry("packagePlants", "Pakket 1")
+        );
+
+        when(gardenRepository.findById(gardenId)).thenReturn(Optional.of(garden1));
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee1));
+
+        gardenService.editGardenByEmployee(gardenId, employeeId, testFields);
+
+        verify(gardenRepository, times(2)).findById(1L);
+        verify(employeeRepository, times(1)).findById(101L);
+        verify(gardenRepository, times(2)).save(garden1);
+
+        assertThat(garden1.getStatus()).isEqualTo("Actief");
+        assertThat(garden1.getEmployee()).isEqualTo(employee1);
+        assertThat(garden1.getStreet()).isEqualTo("Nassaukade");
+        assertThat(garden1.getHouseNumber()).isEqualTo("66");
+        assertThat(garden1.getPostalCode()).isEqualTo("1016TK");
+        assertThat(garden1.getCity()).isEqualTo("Amsterdam");
+        assertThat(garden1.getPackagePlants()).isEqualTo("Pakket 1");
     }
 
 

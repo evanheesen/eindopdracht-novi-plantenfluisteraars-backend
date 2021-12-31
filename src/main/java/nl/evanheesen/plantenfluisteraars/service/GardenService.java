@@ -98,7 +98,7 @@ public class GardenService {
         }
     }
 
-    public void updateGarden(long id, long employeeId, Map<String, String> fields) {
+    public void editGardenByEmployee(long id, long employeeId, Map<String, String> fields) {
         Optional<Garden> optionalGarden = gardenRepository.findById(id);
         if (optionalGarden.isEmpty()) {
             throw new RecordNotFoundException("Geveltuin kan niet gevonden worden");
@@ -119,16 +119,16 @@ public class GardenService {
                 case "street":
                     garden.setStreet((String) fields.get(field));
                     break;
-                case "houseNumber":
+                case "housenumber":
                     garden.setHouseNumber((String) fields.get(field));
                     break;
-                case "postalCode":
+                case "postalcode":
                     garden.setPostalCode((String) fields.get(field));
                     break;
                 case "city":
                     garden.setCity((String) fields.get(field));
                     break;
-                case "packagePlants":
+                case "packageplants":
                     garden.setPackagePlants((String) fields.get(field));
                     break;
             }

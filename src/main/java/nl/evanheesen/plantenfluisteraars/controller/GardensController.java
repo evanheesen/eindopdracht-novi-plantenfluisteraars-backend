@@ -47,13 +47,13 @@ public class GardensController {
     }
 
     @PatchMapping(value = "/garden/{id}/employees/{employeeId}")
-    public ResponseEntity<Object> updateGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
-        gardenService.updateGarden(id, employeeId, fields);
+    public ResponseEntity<Object> editGardenByEmployee(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
+        gardenService.editGardenByEmployee(id, employeeId, fields);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/admin/{id}")
-    public ResponseEntity<Object> editGarden(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
+    public ResponseEntity<Object> editGardenByAdmin(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
     gardenService.editGardenByAdmin(id, fields);
     return ResponseEntity.noContent().build();
     }
