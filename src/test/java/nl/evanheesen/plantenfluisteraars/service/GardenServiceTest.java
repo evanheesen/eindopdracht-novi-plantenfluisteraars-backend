@@ -343,7 +343,6 @@ public class GardenServiceTest {
         var gardenId = garden1.getId();
 
         Employee employee1 = new Employee(101L, "Piet", "Jansen");
-        var employeeId = employee1.getId();
 
         Map<String, String> testFields = Map.ofEntries(
                 Map.entry("street", "Nassaukade"),
@@ -356,7 +355,7 @@ public class GardenServiceTest {
         );
 
         when(gardenRepository.findById(gardenId)).thenReturn(Optional.of(garden1));
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee1));
+        when(employeeRepository.findById(101L)).thenReturn(Optional.of(employee1));
 
         gardenService.editGardenByAdmin(gardenId, testFields);
 

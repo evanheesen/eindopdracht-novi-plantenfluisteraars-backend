@@ -1,7 +1,10 @@
 package nl.evanheesen.plantenfluisteraars.service;
 
+import nl.evanheesen.plantenfluisteraars.dto.request.CustomerRequest;
+import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
 import nl.evanheesen.plantenfluisteraars.dto.response.UsernameResponse;
+import nl.evanheesen.plantenfluisteraars.exception.UserNotFoundException;
 import nl.evanheesen.plantenfluisteraars.exception.UsernameExistsAlready;
 import nl.evanheesen.plantenfluisteraars.model.Customer;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
@@ -161,7 +164,61 @@ public class UserServiceTest {
         assertThat(user1.getCustomer()).isEqualTo(customer1);
     }
 
+    @Test
+    public void testCreateCustomerUserWithExistingUsername() {
+        CustomerRequest testCustomerRequest = new CustomerRequest();
+        testCustomerRequest.setUsername("Piet2021");
+        testCustomerRequest.setEmail("piet@planten.nl");
+        testCustomerRequest.setPassword("password");
+        var username = testCustomerRequest.getUsername();
 
+        User user1 = new User();
+        user1.setUsername(username);
+
+        when(userRepository.findById(username)).thenReturn(Optional.of(user1));
+
+        assertThrows(UserNotFoundException.class, () -> userService.createCustomerUser(testCustomerRequest));
+    }
+
+    @Test
+    public void testCreateEmployeeUserWithExistingUsername() {
+        EmployeeRequest testEmployeeRequest = new EmployeeRequest();
+        testEmployeeRequest.setUsername("Piet2021");
+        testEmployeeRequest.setEmail("piet@planten.nl");
+        testEmployeeRequest.setPassword("password");
+        var username = testEmployeeRequest.getUsername();
+
+        User user1 = new User();
+        user1.setUsername(username);
+
+        when(userRepository.findById(username)).thenReturn(Optional.of(user1));
+
+        assertThrows(UserNotFoundException.class, () -> userService.createEmployeeUser(testEmployeeRequest));
+    }
+
+    @Test
+    public void testEditUser() {
+        User user1 = new User();
+        user1.setUsername("piet2021");
+        user1.setEnabled(false);
+        var username = user1.getUsername();
+
+        Map<String, String> testFields = Map.ofEntries(
+                Map.entry("status", "Actief"),
+                Map.entry("email", "piet@hotmail.com")
+        );
+
+        when(userRepository.findById(username)).thenReturn(Optional.of(user1));
+
+        userService.editUser(username, testFields);
+
+        verify(userRepository, times(1)).findById(username);
+        verify(userRepository, times(1)).save(user1);
+
+        assertThat(user1.getEnabled()).isEqualTo(true);
+        assertThat(user1.getEmail()).isEqualTo("piet@hotmail.com");
+
+    }
 
 
 }
