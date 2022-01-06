@@ -117,19 +117,29 @@ public class GardenService {
                     }
                     break;
                 case "street":
-                    garden.setStreet((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setStreet((String) fields.get(field));
+                    }
                     break;
                 case "housenumber":
-                    garden.setHouseNumber((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setHouseNumber((String) fields.get(field));
+                    }
                     break;
                 case "postalcode":
-                    garden.setPostalCode((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setPostalCode((String) fields.get(field));
+                    }
                     break;
                 case "city":
-                    garden.setCity((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setCity((String) fields.get(field));
+                    }
                     break;
                 case "packageplants":
-                    garden.setPackagePlants((String) fields.get(field));
+                    if (!fields.get(field).equals("")) {
+                        garden.setPackagePlants((String) fields.get(field));
+                    }
                     break;
             }
         }
