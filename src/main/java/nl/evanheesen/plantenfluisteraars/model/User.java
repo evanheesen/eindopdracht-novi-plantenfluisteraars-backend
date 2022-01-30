@@ -21,7 +21,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean enabled = true;
+    private Boolean enabled = true;
 
     @Column(nullable = false)
     private String email;
@@ -42,21 +42,8 @@ public class User {
             fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();
 
-
-    public void addAuthority(Authority authority) {
-        this.authorities.add(authority);
-    }
-
     public void addAuthority(String authorityString) {
         this.authorities.add(new Authority(this.username, authorityString));
-    }
-
-    public void removeAuthority(Authority authority) {
-        this.authorities.remove(authority);
-    }
-
-    public void removeAuthority(String authorityString) {
-        this.authorities.removeIf(authority -> authority.getAuthority().equalsIgnoreCase(authorityString));
     }
 
 

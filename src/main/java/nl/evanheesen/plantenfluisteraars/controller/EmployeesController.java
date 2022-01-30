@@ -2,12 +2,10 @@ package nl.evanheesen.plantenfluisteraars.controller;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.EmployeeRequest;
 import nl.evanheesen.plantenfluisteraars.model.Employee;
-import nl.evanheesen.plantenfluisteraars.model.User;
 import nl.evanheesen.plantenfluisteraars.service.EmployeeService;
 import nl.evanheesen.plantenfluisteraars.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -45,7 +43,7 @@ public class EmployeesController {
 
     @PostMapping(value = "")
     public ResponseEntity<Object> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
-//        convert DTO to entity
+
         Employee employee = employeeService.convertDTOToEmployee(employeeRequest);
         String username = userService.createEmployeeUser(employeeRequest);
         long employeeId = employeeService.createEmployee(employee);
@@ -57,13 +55,13 @@ public class EmployeesController {
         return ResponseEntity.created(location).body(location);
     }
 
-    @PatchMapping(value = "/{id}")
-    public ResponseEntity<Object> updateEmployeePartial(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
-        employeeService.partialUpdateEmployee(id, fields);
+    @PatchMapping(value = "/edit/{id}")
+    public ResponseEntity<Object> editEmployee(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
+        employeeService.editEmployee(id, fields);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Object> deleteEmployee(@PathVariable("id") long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();

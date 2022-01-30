@@ -1,6 +1,5 @@
 package nl.evanheesen.plantenfluisteraars.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,19 +18,13 @@ public class Garden {
     @Column(updatable = false, unique = true, name = "garden_id")
     public long id;
 
-    @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
-    Employee employee;
-
-//    @ManyToOne
-////    @MapsId("employeeId")
-//    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
-//    Employee employee;
+    private Employee employee;
 
     @NotNull
     private LocalDate submissionDate;

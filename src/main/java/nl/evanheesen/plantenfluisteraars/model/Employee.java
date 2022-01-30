@@ -14,7 +14,6 @@ import javax.persistence.OneToOne;
 @Table(name = "employees")
 public class Employee {
 
-    // attributen
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, name = "employee_id")
@@ -41,9 +40,6 @@ public class Employee {
     @Column(length = 10)
     public String status;
 
-//    @Column(length = 120, nullable = false, unique = true)
-//    public String email;
-
     @Column(length = 15)
     public String phone;
 
@@ -52,8 +48,19 @@ public class Employee {
     private DBFile dbFile;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employee")
-//    @JoinColumn(name = "employee_id")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "employee")
+    private User user;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
     List<Garden> gardens;
 
+    public Employee() {
+    }
+
+    public Employee(Long id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

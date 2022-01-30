@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-// Cross origin port 3000:
 @CrossOrigin(origins = "http://localhost:3001", maxAge = 3600)
 @RestController
 public class AuthenticationController {

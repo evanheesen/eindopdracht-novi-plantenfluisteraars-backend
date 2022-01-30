@@ -52,10 +52,4 @@ public class FileUploadController {
                 .body(new ByteArrayResource(dbFile.getData()));
     }
 
-//    @DeleteMapping(value = "/{id}/get-file/{fileId}")
-//    public ResponseEntity<Object> deleteFile(@PathVariable("employeeId") long id, @PathVariable("fileId") String fileId) {
-//        fileUploadService.deleteFile(id, fileId);
-//        return ResponseEntity.noContent().build();
-//    }
-
 }

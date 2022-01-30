@@ -1,17 +1,10 @@
 package nl.evanheesen.plantenfluisteraars.controller;
 
-import nl.evanheesen.plantenfluisteraars.model.Customer;
-import nl.evanheesen.plantenfluisteraars.model.Garden;
-import nl.evanheesen.plantenfluisteraars.repository.GardenRepository;
 import nl.evanheesen.plantenfluisteraars.service.CustomerService;
 import nl.evanheesen.plantenfluisteraars.service.GardenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3001", maxAge = 3600)
@@ -53,26 +46,23 @@ public class GardensController {
         return ResponseEntity.ok().body(gardenService.getGardensByCustomerId(id));
     }
 
-    @PutMapping(value = "/{id}/employees/{employeeId}")
-    public void addEmployeeToGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId) {
-        gardenService.addEmployeeToGarden(id, employeeId);
-    }
-
     @PatchMapping(value = "/garden/{id}/employees/{employeeId}")
-    public ResponseEntity<Object> updateGarden(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
-        gardenService.updateGarden(id, employeeId, fields);
+    public ResponseEntity<Object> editGardenByEmployee(@PathVariable("id") long id, @PathVariable("employeeId") long employeeId, @RequestBody Map<String, String> fields) {
+        gardenService.editGardenByEmployee(id, employeeId, fields);
         return ResponseEntity.noContent().build();
     }
 
-//    @PostMapping("")
-//    public ResponseEntity<Object> addGarden(@RequestBody Garden garden) {
-//        long newId = gardenService.addGarden(garden);
-//
-//        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/gardens/{id}")
-//                .buildAndExpand(newId).toUri();
-//
-//        return ResponseEntity.created(location).body(location);
-//    }
+    @PatchMapping(value = "/admin/{id}")
+    public ResponseEntity<Object> editGardenByAdmin(@PathVariable("id") long id, @RequestBody Map<String, String> fields) {
+    gardenService.editGardenByAdmin(id, fields);
+    return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<Object> deleteGarden(@PathVariable("id") long id) {
+         gardenService.deleteGarden(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

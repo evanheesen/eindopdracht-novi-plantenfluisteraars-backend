@@ -1,8 +1,7 @@
 package nl.evanheesen.plantenfluisteraars.controller;
 
 import nl.evanheesen.plantenfluisteraars.dto.request.UserPostRequest;
-import nl.evanheesen.plantenfluisteraars.exception.BadRequestException;
-import nl.evanheesen.plantenfluisteraars.model.User;
+import nl.evanheesen.plantenfluisteraars.dto.response.UsernameResponse;
 import nl.evanheesen.plantenfluisteraars.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,15 @@ public class UsersController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @GetMapping(value = "/{username}")
+    @GetMapping(value = "/getusername/{username}")
+    public ResponseEntity<?> getUsername(@PathVariable("username") String username) {
+
+        UsernameResponse usernameResponse = userService.getUsername(username);
+
+        return ResponseEntity.ok(usernameResponse);
+    }
+
+    @GetMapping(value = "/user/{username}")
     public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
@@ -39,50 +46,16 @@ public class UsersController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(value = "/{username}")
-    public ResponseEntity<Object> updateUser(@PathVariable("username") String username, @RequestBody User user) {
-        userService.updateUser(username, user);
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{username}/authorities")
-    public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
-        return ResponseEntity.ok().body(userService.getAuthorities(username));
-    }
-
-    @PostMapping(value = "/{username}/authorities")
-    public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
-        try {
-            String authorityName = (String) fields.get("authority");
-            userService.addAuthority(username, authorityName);
-            return ResponseEntity.noContent().build();
-        }
-        catch (Exception ex) {
-            throw new BadRequestException();
-        }
-    }
-
-    @DeleteMapping(value = "/{username}/authorities/{authority}")
-    public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
-        userService.removeAuthority(username, authority);
+    @PatchMapping(value = "/edit/{username}")
+    public ResponseEntity<Object> editUser(@PathVariable("username") String username, @RequestBody Map<String, String> fields) {
+        userService.editUser(username, fields);
         return ResponseEntity.noContent().build();
     }
-
-    @PutMapping("/{username}/employees/{id}")
-    public void assignEmployeeToUser(@PathVariable("id") long employeeId, @PathVariable("username") String username) {
-        userService.assignEmployeeToUser(username, employeeId);
-    }
-
-    @PutMapping("/{username}/customers/{id}")
-    public void assignCustomerToUser(@PathVariable("id") long customerId, @PathVariable("username") String username) {
-        userService.assignCustomerToUser(username, customerId);
-    }
-
 
 }

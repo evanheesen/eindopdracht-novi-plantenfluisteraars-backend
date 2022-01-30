@@ -1,7 +1,7 @@
-INSERT INTO customers (customer_id, first_name, last_name, phone, garden_id)
+INSERT INTO customers (customer_id, first_name, last_name, phone)
 VALUES
-(1000, 'Karin', 'Bloemen', '0677881122', (SELECT garden_id from gardens WHERE garden_id=3000)),
-(1001, 'Pascal', 'Struijk', '0644556677', (SELECT garden_id from gardens WHERE garden_id=3001));
+(1000, 'Karin', 'Bloemen', '0677881122'),
+(1001, 'Pascal', 'Struijk', '0644556677');
 
 INSERT INTO employees (employee_id, first_name, last_name, street, house_number, postal_code, city, phone, status)
 VALUES
@@ -10,8 +10,8 @@ VALUES
 
 INSERT INTO gardens (garden_id, submission_date, street, house_number, postal_code, city, package_plants, status, customer_id, employee_id)
 VALUES
-(3000, '2021-11-14', 'Westerstraat', '57', '1015TP', 'Amsterdam', 'Pakket Wintergroen', 'Open', (SELECT customer_id from customers WHERE customer_id=1000), NULL),
-(3001, '2021-11-13', 'Kinkerstraat', '71', '1054ZL', 'Amsterdam', 'Pakket Kleurrijk Laag', 'Actief', (SELECT customer_id from customers WHERE customer_id=1001), (SELECT employee_id from employees WHERE employee_id=2001));
+(3000, '2021-11-14', 'Westerstraat', '57', '1015TP', 'Amsterdam', 'Pakket 1 - Wintergroen', 'Open', (SELECT customer_id from customers WHERE customer_id=1000), NULL),
+(3001, '2021-11-13', 'Kinkerstraat', '71', '1054ZL', 'Amsterdam', 'Pakket 2 - Kleurrijk Laag', 'Actief', (SELECT customer_id from customers WHERE customer_id=1001), (SELECT employee_id from employees WHERE employee_id=2001));
 
 INSERT INTO users (username, password, enabled, email, customer_id, employee_id)
 VALUES
